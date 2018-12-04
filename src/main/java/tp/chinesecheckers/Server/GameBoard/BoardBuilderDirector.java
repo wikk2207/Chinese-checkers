@@ -7,7 +7,10 @@ public class BoardBuilderDirector {
   private GameBoard gameBoard;
   private BoardBulider boardBulider;
 
-
+  /**
+   *
+   * @param gameMode
+   */
   public void setGameMode(int gameMode) {
     if (gameMode == 1) {
       boardBulider = new TenPawnsBoardBuilder();
@@ -17,6 +20,11 @@ public class BoardBuilderDirector {
     }
   }
 
+  /**
+   *
+   * @param players
+   * @return
+   */
   public GameBoard buildGameBoard(int players) {
     switch (players) {
       case 2:
