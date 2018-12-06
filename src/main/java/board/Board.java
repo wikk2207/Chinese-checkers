@@ -7,12 +7,21 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
-public class Board{
+public class Board {
 
   private ArrayList<ArrayList<Hexagon>> rows;
   private Scene scene;
+  private int size;
+  private int pawns; //amount of pawns for one player
 
-  Board(){
+  Board(int size) throws BoardException{
+
+    if(size%4!=1) {
+      throw new BoardException("Invalid size of board. It should be number x which: x%4=1");
+    }
+    this.size=size;
+    pawns=size/4;
+
     rows = new ArrayList<ArrayList<Hexagon>>();
     BorderPane borderPane = new BorderPane();
     // GridPane pane = new GridPane();
@@ -20,13 +29,13 @@ public class Board{
     ArrayList<Hexagon> newRow;
     Hexagon newHexagon;
 
-    scene = new Scene(borderPane,760,500);
+    scene = new Scene(borderPane,1.5*size*30,size*28);
     //primaryStage.setScene(scene);
 
 
-    for (int y =0; y<17; y++) {
+    for (int y =0; y<size; y++) {
       newRow = new ArrayList<Hexagon>();
-      for (int x=0; x<17; x++) {
+      for (int x=0; x<size; x++) {
         newHexagon =new Hexagon(x*30 + y*15,y*25);
         newHexagon.setFill(Color.WHITE);
 
@@ -43,13 +52,13 @@ public class Board{
   }
 
   private void paintBoard() {
-    for(int y=0;y<13;y++) {
-      for (int x=12;x>11-y;x--) {
+    for(int y=0;y<size-pawns;y++) {
+      for (int x=size-pawns-1;x>size-pawns-2-y;x--) {
         rows.get(y).get(x).setFill(Color.BISQUE);
       }
     }
-    for(int y=4;y<17;y++) {
-      for (int x=4;x<17-y+4;x++) {
+    for(int y=pawns;y<size;y++) {
+      for (int x=pawns;x<size-y+pawns;x++) {
         rows.get(y).get(x).setFill(Color.BISQUE);
       }
     }
@@ -57,47 +66,46 @@ public class Board{
 
   private void paintPlayerFields(int playerId) {
     int x,y; //coordinates
+    int i,j;
 
     //fields1
-    for(y=13;y<17;y++){
-      for(x=4; x<8-y+13;x++) {
-        rows.get(y).get(x).setFill(Color.SALMON);
+    for(i=0,y=size-pawns;i<pawns;i++) {
+      for (j=0,x=pawns;j<pawns-i;j++) {
+        rows.get(y+i).get(x+j).setFill(Color.SALMON);
       }
     }
-
-    //fields 2
-    for( y=12;y>8;y--) {
-      for ( x=3; x>8+3-y; x--) {
-        rows.get(y).get(x).setFill(Color.SANDYBROWN);
+    //fields2
+    for(i=0, y=size-pawns-1;i<pawns;i++) {
+      for ( x=pawns-1, j=0; j<pawns-i; j++) {
+        rows.get(y-i).get(x-j).setFill(Color.SANDYBROWN);
       }
     }
 
     //fields3
-    for(y=4;y<8;y++){
-      for(x=4; x<8-y+4;x++) {
-        rows.get(y).get(x).setFill(Color.LIGHTGREEN);
+    for(y=pawns, i=0;i<pawns;i++){
+      for(x=pawns,j=0; j<pawns-i;j++) {
+        rows.get(y+i).get(x+j).setFill(Color.LIGHTGREEN);
       }
     }
 
     //fields4
-    for( y=3;y>=0;y--) {
-      for ( x=12; x>=12-y; x--) {
-        rows.get(y).get(x).setFill(Color.LIGHTYELLOW);
+    for(y=pawns-1, i=0;i<pawns;i++) {
+      for ( x=size-pawns-1, j=0; j<pawns-i; j++) {
+        rows.get(y-i).get(x-j).setFill(Color.LIGHTYELLOW);
       }
     }
 
     //fields5
-    for(y=4;y<8;y++){
-      for(x=13; x<17-y+4;x++) {
-        rows.get(y).get(x).setFill(Color.PLUM);
+    for(y=pawns, i=0;i<pawns;i++){
+      for(x=size-pawns, j=0; j<pawns-i;j++) {
+        rows.get(y+i).get(x+j).setFill(Color.PLUM);
       }
     }
 
-
     //fields6
-    for( y=12;y>8;y--) {
-      for ( x=12; x>8+12-y; x--) {
-        rows.get(y).get(x).setFill(Color.LIGHTBLUE);
+    for( y=size-pawns-1,i=0;i<pawns;i++) {
+      for ( x=size-pawns-1, j=0; j<pawns-i; j++) {
+        rows.get(y-i).get(x-j).setFill(Color.LIGHTBLUE);
       }
     }
   }

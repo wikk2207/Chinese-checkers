@@ -15,9 +15,14 @@ public class BoardAdapter extends Application {
   @Override
   public void start(Stage primaryStage) {
 
-    board = new Board();
-    primaryStage.setScene(board.getScene());
-    primaryStage.show();
+    try{
+      board = new Board(17);
+      primaryStage.setScene(board.getScene());
+      primaryStage.show();
+    } catch (BoardException x) {
+      System.out.println(x.getMessage());
+      System.exit(-1);
+    }
 
 
   }
