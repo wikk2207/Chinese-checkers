@@ -15,8 +15,13 @@ public class GameBoard {
    */
   private int [][]board;
 
-  public GameBoard() {
-    board = new int[17][17];
+  public GameBoard(int height, int width) {
+    board = new int[height][width];
+    for (int i = 0; i < height; i++) {
+      for (int j = 0; j < width; j++) {
+        board[i][j] = 0;
+      }
+    }
   }
 
   /**

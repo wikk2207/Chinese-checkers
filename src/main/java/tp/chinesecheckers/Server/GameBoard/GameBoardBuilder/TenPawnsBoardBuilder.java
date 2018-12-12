@@ -5,14 +5,14 @@ import tp.chinesecheckers.Server.GameBoard.GameBoard;
 public class TenPawnsBoardBuilder extends BoardBulider {
 
   public TenPawnsBoardBuilder() {
-    this.gameBoard = new GameBoard();
+    this.gameBoard = new GameBoard(17, 17);
   }
 
   @Override
   public void addPlayerOne() {
     for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < i; j++) {
-        gameBoard.addPawn(5 + j, i, 1);
+      for (int j = 0; j <= i; j++) {
+        gameBoard.addPawn(4 + j, i, 1);
       }
     }
   }
@@ -20,8 +20,8 @@ public class TenPawnsBoardBuilder extends BoardBulider {
   @Override
   public void addPlayerTwo() {
     for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < i; j++) {
-        gameBoard.addPawn(i, 5 + j, 2);
+      for (int j = 0; j <= i; j++) {
+        gameBoard.addPawn(i, 4 + j, 2);
       }
     }
   }
@@ -29,8 +29,8 @@ public class TenPawnsBoardBuilder extends BoardBulider {
   @Override
   public void addPlayerThree() {
     for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < i; j++) {
-        gameBoard.addPawn(5 + j, 10 + i, 3);
+      for (int j = 0; j <= i; j++) {
+        gameBoard.addPawn(4 + j, 9 + i, 3);
       }
     }
   }
@@ -38,8 +38,8 @@ public class TenPawnsBoardBuilder extends BoardBulider {
   @Override
   public void addPlayerFour() {
     for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < i; j++) {
-        gameBoard.addPawn(10 + i, 14 + j, 4);
+      for (int j = 0; j <= i; j++) {
+        gameBoard.addPawn(9 + i, 13 + j, 4);
       }
     }
   }
@@ -47,8 +47,8 @@ public class TenPawnsBoardBuilder extends BoardBulider {
   @Override
   public void addPlayerFife() {
     for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < i; j++) {
-        gameBoard.addPawn(14 + j, 10 + i, 5);
+      for (int j = 0; j <= i; j++) {
+        gameBoard.addPawn(13 + j, 9 + i, 5);
       }
     }
   }
@@ -56,8 +56,8 @@ public class TenPawnsBoardBuilder extends BoardBulider {
   @Override
   public void addPlayerSix() {
     for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < i; j++) {
-        gameBoard.addPawn(10 + i, 5 + j, 6);
+      for (int j = 0; j <= i; j++) {
+        gameBoard.addPawn(9 + i, 4 + j, 6);
       }
     }
   }

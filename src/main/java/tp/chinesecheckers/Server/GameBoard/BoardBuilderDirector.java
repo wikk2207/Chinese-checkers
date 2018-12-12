@@ -4,7 +4,6 @@ import tp.chinesecheckers.Server.GameBoard.GameBoardBuilder.BoardBulider;
 import tp.chinesecheckers.Server.GameBoard.GameBoardBuilder.TenPawnsBoardBuilder;
 
 public class BoardBuilderDirector {
-  private GameBoard gameBoard;
   private BoardBulider boardBulider;
 
   /**
