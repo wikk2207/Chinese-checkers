@@ -3,10 +3,11 @@ package board;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Label;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Board {
@@ -19,6 +20,9 @@ public class Board {
   private int playerId;
   private ArrayList<Pawn> pawnsList;
   private Pane pane;
+  private boolean fieldClicked;
+  private Pawn chosenPawn;
+  private Hexagon oldHex, newHex;
 
 
 
@@ -34,6 +38,8 @@ public class Board {
     this.playerId=playerID;
     this.colors=Colors.getColors(playerID);
     pawnsList = new ArrayList<Pawn>();
+    fieldClicked=false;
+    chosenPawn=null;
 
 
     rows = new ArrayList<ArrayList<Hexagon>>();
@@ -41,9 +47,12 @@ public class Board {
     // GridPane pane = new GridPane();
     pane = new Pane();
 
+    //scene = new Scene(borderPane,1.5*size*30,size*28);
+    scene = new Scene(borderPane,1.5*size*40,size*35);
 
-    scene = new Scene(borderPane,1.5*size*30,size*28);
     //primaryStage.setScene(scene);
+
+
 
 
     createFields();
@@ -51,10 +60,50 @@ public class Board {
     createPawns();
     addPawns(pawnsList);
 
+
+
     borderPane.setCenter(pane);
+    //borderPane.setBottom(invalidMoveWarning);
     paintPlayerFields(1);
+    paneEvent(pane);//////
+
     //primaryStage.show();
 
+  }
+
+  private void paneEvent(Pane pane) {
+    pane.setOnMouseClicked(e->{
+      if(!fieldClicked) {
+        oldHex = findField(e.getX(),e.getY());
+        if(oldHex.getPawn()!=null) {
+          chosenPawn =oldHex.getPawn();
+          //chosenPawn.setFill(Color.BLACK);
+          chosenPawn.setFill(chosenPawn.getColor().darker());
+          fieldClicked=true;
+        }
+      } else {
+        if(chosenPawn != null && oldHex!=null) {
+          newHex = findField(e.getX(),e.getY());
+          if(newHex.getPawn()==null) {
+            boolean move = Player.isMoveValid(oldHex.getX(), oldHex.getY(),
+              newHex.getX(), newHex.getY());
+            if(move) {
+              //findField(chosenPawn.getCenterX(), chosenPawn.getCenterY()).setAsEmpty();
+              chosenPawn.setCenterX(newHex.getCenterX());
+              chosenPawn.setCenterY(newHex.getCenterY());
+              newHex.setPawn(chosenPawn);
+              oldHex.setAsEmpty();
+              //chosenPawn.setFill(Color.WHITE);
+              chosenPawn.setFill(chosenPawn.getColor());
+            }
+          }
+
+          chosenPawn.setFill(chosenPawn.getColor());
+        }
+        fieldClicked=false;
+      }
+
+    });
   }
 
   private void paintBoard() {
@@ -130,12 +179,13 @@ public class Board {
         yCoord=rows.get(y).get(x).getCenterY();
         newPawn = new Pawn(xCoord,yCoord,playerId);
         pawnsList.add(newPawn);
-        addActionToPawn(newPawn);
+        rows.get(y).get(x).setPawn(newPawn);
+        //addMoveToPawn(newPawn);
       }
     }
   }
 
-  private int amountOfPawns() {
+  public int amountOfPawns() {
     int n=((size-1)/4);
     int amount = (n*(n+1))/2;
     return amount;
@@ -144,6 +194,7 @@ public class Board {
   public void addPawns(ArrayList<Pawn> pawns) {
     for(int i=0; i<pawns.size();i++){
       pane.getChildren().add(pawns.get(i));
+
     }
   }
 
@@ -154,19 +205,38 @@ public class Board {
     for (int y =0; y<size; y++) {
       newRow = new ArrayList<Hexagon>();
       for (int x=0; x<size; x++) {
-        newHexagon =new Hexagon(x*30 + y*15,y*25);
+        newHexagon =new Hexagon(x*40 + y*20,y*32);
+       // newHexagon =new Hexagon(x*30 + y*15,y*25);
         newHexagon.setFill(Color.WHITE);
-
         pane.getChildren().add(newHexagon);
         newRow.add(newHexagon);
       }
       rows.add(newRow);
     }
-}
+  }
 
-  private void addActionToPawn(Pawn pawn) {
+  private void addActionToField(Hexagon field) {
+   field.setOnMousePressed(e-> {
+     if(!fieldClicked) {
+       if(field.getPawn()!=null) {
+          fieldClicked = true;
+          chosenPawn = field.getPawn();
+          field.setAsEmpty();
+          chosenPawn.setFill(chosenPawn.getColor().brighter());
+       }
+     } else {
+       field.setPawn(chosenPawn);
+       chosenPawn.setCenterX(field.getCenterX());
+       chosenPawn.setCenterY(field.getCenterY());
+       chosenPawn.setFill(chosenPawn.getColor().darker());
+     }
 
-    pawn.setOnMousePressed(e->{
+   });
+  }
+
+  private void addMoveToPawn(Pawn pawn) {
+
+    pawn.setOnDragDetected(e->{
       final Hexagon oldHex = findField(e.getX(), e.getY());
       pawn.setOnMouseDragged(ee->{
         pawn.setCenterX(ee.getX());
@@ -174,7 +244,7 @@ public class Board {
 
         pawn.setOnMouseReleased(eee->{
           final Hexagon newHex = findField(eee.getX(), eee.getY());
-          if(newHex!=null&&newHex.getPawn()==null){
+          if(newHex!=null&&newHex.getPawn()==null&&Player.isMoveValid(oldHex.getX(), oldHex.getY(), newHex.getX(), newHex.getY())){
             pawn.setCenterX(newHex.getCenterX());
             pawn.setCenterY(newHex.getCenterY());
             oldHex.setAsEmpty();
@@ -207,5 +277,9 @@ public class Board {
 
   public Scene getScene() {
     return scene;
+  }
+
+  public Hexagon getField(int x, int y) {
+    return rows.get(x).get(y);
   }
 }

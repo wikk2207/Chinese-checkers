@@ -23,6 +23,10 @@ public class Pawn extends Circle{
     this.y=y;
   }
 
+  public Color getColor() {
+    return color[playerId-1];
+  }
+
   public int getPlayerId() {
     return playerId;
   }
