@@ -1,11 +1,7 @@
 package board;
 
-import board.Board;
-import board.BoardException;
+
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -35,6 +31,11 @@ public class Player extends Application {
 
   }
 
+  /**
+   * Adding another player's pawns to this player's board
+   * @param playerID Id of another player
+   * @param coordinates Coordinates of pawns
+   */
   public void addOtherPlayer(int playerID, int[] coordinates) {
     ArrayList<Pawn> pawns = new ArrayList<>();
     double x, y;
@@ -55,8 +56,16 @@ public class Player extends Application {
     launch(args);
   }
 
+  /**
+   * Checking if move is valid (following game rules).
+   * @param fromX X coordinate of field when pawn starts move
+   * @param fromY Y coordinate of field when pawn starts move
+   * @param toX X coordinate of field when pawn ends move
+   * @param toY Y coordinate of field when pawn ends move
+   * @return
+   */
   public static boolean isMoveValid(double fromX, double fromY, double toX, double toY) {
-    return true;
+    return true; //in future - asking server if is valid
   }
 
   private int[] coords(int playerId) {
