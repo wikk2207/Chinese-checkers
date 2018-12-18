@@ -9,7 +9,7 @@ import java.net.Socket;
 public class RealPlayer extends Thread implements Player {
   private final String SET_ID = "ID";
   private final String SET_NUMBER_OF_PLAYERS = "CREATE_GAME";
-  private final String OPPONRNT_MOVED = "OPPONENT_MOVED";
+  private final String OPPONENT_MOVED = "OPPONENT_MOVED";
   private final String YOUR_TURN = "YOUR_TURN";
   private final String TURN_END = "TURN_END";
   private final String START_GAME = "START_GAME";
@@ -39,7 +39,6 @@ public class RealPlayer extends Thread implements Player {
     try {
       input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       output = new PrintWriter(socket.getOutputStream(), true);
-      sleep(2000);
       output.println(SET_ID + " " + id);
       if(id == 1) {
 
@@ -60,14 +59,12 @@ public class RealPlayer extends Thread implements Player {
       }
     } catch (IOException e) {
       System.err.println("Player is dead:" + e);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
     }
   }
 
   @Override
   public void otherPlayerMoved(int opponent, int begX, int begY, int endX, int endY) {
-    output.println(OPPONRNT_MOVED + " " + opponent + " " + begX + " " + begY + " " + endX
+    output.println(OPPONENT_MOVED + " " + opponent + " " + begX + " " + begY + " " + endX
         + " " + endY);
   }
 
@@ -97,7 +94,11 @@ public class RealPlayer extends Thread implements Player {
           String[] arguments = command.substring(MOVED.length() + 1).split(" ");
           int[] cordinates = new int[4];
           for (int i = 0; i < 4; i++) {
-            cordinates[i] = Integer.parseInt(arguments[i]);
+            try {
+              cordinates[i] = Integer.parseInt(arguments[i]);
+            } catch (NumberFormatException e) {
+              System.err.println("Zły format liczby");
+            }
           }
           if (!game.move(id, cordinates[0], cordinates[1], cordinates[2], cordinates[3])) {
             output.println(WRONG_MOVE);
