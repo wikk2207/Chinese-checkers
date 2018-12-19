@@ -5,13 +5,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
-public class Pawn extends Circle{
+public class Pawn extends Circle {
   private double x;
   private double y;
   private static Color[] color = {Color.RED, Color.ORANGE,Color.GREEN, Color.BLACK, Color.PURPLE, Color.BLUE};
   private int playerId;
 
-  Pawn(double x, double y, int playerID) {
+  public Pawn(double x, double y, int playerID) {
     super(x,y,7,color[playerID-1]);
     this.x=x;
     this.y=y;

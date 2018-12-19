@@ -1,13 +1,11 @@
 package board;
 
-import javafx.collections.ObservableList;
-import javafx.geometry.Point2D;
+
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import player.Player;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class Board {
@@ -27,8 +25,7 @@ public class Board {
 
 
 
-  Board(int size, int playerID) throws BoardException{
-
+  public Board(int size, int playerID) throws BoardException{
     if(size%4!=1) {
       throw new BoardException("Invalid size of board. It should be number x which: x%4=1");
     }
@@ -61,22 +58,21 @@ public class Board {
   }
 
   private void paneEvent(Pane pane) {
-    pane.setOnMouseClicked(e->{
-      if(!fieldClicked) {
+    pane.setOnMouseClicked(e -> {
+      if (!fieldClicked) {
         oldHex = findField(e.getX(),e.getY());
-        if(oldHex.getPawn()!=null) {
-          chosenPawn =oldHex.getPawn();
-          //chosenPawn.setFill(Color.BLACK);
+        if (oldHex.getPawn() != null && oldHex.getPawn().getPlayerId()==playerId) {
+          chosenPawn = oldHex.getPawn();
           chosenPawn.setFill(chosenPawn.getColor().darker());
-          fieldClicked=true;
+          fieldClicked = true;
         }
       } else {
-        if(chosenPawn != null && oldHex!=null) {
+        if (chosenPawn != null && oldHex != null) {
           newHex = findField(e.getX(),e.getY());
-          if(newHex.getPawn()==null) {
+          if (newHex.getPawn() == null) {
             boolean move = Player.isMoveValid(oldHex.getX(), oldHex.getY(),
               newHex.getX(), newHex.getY());
-            if(move) {
+            if (move) {
               chosenPawn.setCenterX(newHex.getCenterX());
               chosenPawn.setCenterY(newHex.getCenterY());
               newHex.setPawn(chosenPawn);
@@ -89,7 +85,7 @@ public class Board {
           newHex = null;
         }
         oldHex = null;
-        fieldClicked=false;
+        fieldClicked = false;
       }
 
     });
@@ -162,10 +158,10 @@ public class Board {
     double xCoord, yCoord;
     Pawn newPawn;
 
-    for(y=size-pawns;y<size;y++) {
-      for (x=pawns;x<pawns+size-y;x++) {
-        xCoord=rows.get(y).get(x).getCenterX();
-        yCoord=rows.get(y).get(x).getCenterY();
+    for (y = size - pawns; y < size;y++) {
+      for (x = pawns; x < pawns + size - y; x++) {
+        xCoord = rows.get(y).get(x).getCenterX();
+        yCoord = rows.get(y).get(x).getCenterY();
         newPawn = new Pawn(xCoord,yCoord,playerId);
         pawnsList.add(newPawn);
         rows.get(y).get(x).setPawn(newPawn);
@@ -183,7 +179,7 @@ public class Board {
       for (int x=0; x<size; x++) {
         newHexagon =new Hexagon(x*40 + y*20,y*32);
         // newHexagon =new Hexagon(x*30 + y*15,y*25);
-        newHexagon.setFill(Color.WHITE);
+        newHexagon.setFill(Color.WHITESMOKE);
         pane.getChildren().add(newHexagon);
         newRow.add(newHexagon);
       }
@@ -246,6 +242,8 @@ public class Board {
   public void addPawns(ArrayList<Pawn> pawns) {
     for(int i=0; i<pawns.size();i++){
       pane.getChildren().add(pawns.get(i));
+      System.out.println(i);
+      System.out.println(pawns.get(i).getCenterX());
 
     }
   }
@@ -270,5 +268,22 @@ public class Board {
 
   public Hexagon getField(int x, int y) {
     return rows.get(x).get(y);
+  }
+
+  public void addPlayer(ArrayList<Pawn> pawns) {
+    pane.getChildren().addAll(pawns);
+  }
+  public ArrayList<ArrayList<Hexagon>> getRows() {
+  return rows;
+  }
+
+  public void uploadMove(int playerId, int fromX, int fromY, int toX, int toY) {
+    Hexagon fromField = rows.get(fromY).get(fromX);
+    Hexagon toField = rows.get(toY).get(toX);
+    fromField.getPawn().setCenterY(toField.getCenterY());
+    fromField.getPawn().setCenterX(toField.getCenterX());
+    fromField.getPawn().move(toX, toY);
+    toField.setPawn(fromField.getPawn());
+    fromField.setAsEmpty();
   }
 }

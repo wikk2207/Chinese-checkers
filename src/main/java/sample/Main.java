@@ -1,31 +1,42 @@
-import board.Board;
-import board.BoardException;
+package sample;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class Main extends Application {
+  private VBox root;
+  public static Counter counter;
+  private Stage stage;
 
+  @Override
   public void start(Stage primaryStage) {
-    if(amIFirst()) {
-      //create new game
+      counter = new Counter(true);
+      counter.setPlayerId(getMyId());
+      counter.setBoardSize(17);
+      stage = primaryStage;
+
       try {
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("startGui.fxml"));
-        Scene scene = new Scene(root,400, 500);
-        primaryStage.setTitle("Chinese Checkers");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        if (amIFirst()) {
+          //create new game
+          root = FXMLLoader.load(getClass().getResource("/startGui.fxml"));
+        } else {
+          //join created game
+          root = FXMLLoader.load(getClass().getResource("/joinGui.fxml"));
+        }
+        Scene scene = new Scene(root, 1000, 600);
+        stage.setTitle("Chinese Checkers");
+        stage.setScene(scene);
+        stage.show();
       } catch (IOException e) {
         System.out.println(e.getMessage());
       }
 
-    } else {
-      //join created game
-    }
   }
 
   public static void main(String[] args) {
@@ -34,6 +45,17 @@ public class Main extends Application {
 
   boolean amIFirst() {
     return true; //asking server
+  }
+
+  int getMyId() {
+    //asking serwer
+    return 1;
+  }
+
+   void createGame(int players, int robots) {
+    counter.createBoard();
+    counter.addPlayer(2);
+    stage.setScene(counter.getScene());
   }
 
 }
