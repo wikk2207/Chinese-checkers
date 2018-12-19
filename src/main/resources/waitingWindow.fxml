@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="waiting" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+         <Label alignment="CENTER" contentDisplay="CENTER" text="You have to wait for other players" BorderPane.alignment="CENTER">
+            <BorderPane.margin>
+               <Insets top="30.0" />
+            </BorderPane.margin>
+         <VBox.margin>
+            <Insets bottom="30.0" />
+         </VBox.margin>
+         </Label>
+         <ProgressIndicator prefHeight="50" prefWidth="50" progress="-1.0" />
+   </children>
+
+</VBox>

@@ -19,6 +19,13 @@ public class DefaultMoveController implements MoveController {
       return !gameBoard.isFree(begX + (x / 2), begY + (y / 2));
     }
     return true;
+  }
+
+  @Override
+  public boolean isJump(int begX, int begY, int endX, int endY) {
+    int x = endX - begX;
+    int y = endY - begY;
+    return ((Math.abs(x) == 2 && Math.abs(y) == 0) || (Math.abs(x) == 0 && Math.abs(y) == 2));
 
   }
 
