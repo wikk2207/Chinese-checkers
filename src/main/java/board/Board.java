@@ -3,11 +3,13 @@ package board;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import player.Player;
 import player.RealPlayer;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Board {
@@ -313,4 +315,10 @@ public class Board {
   public void setMyTurn(boolean myTurn) {
     this.myTurn=myTurn;
   }
+
+  /*private void addButton() {
+    Button skipButton = new Button();
+    skipButton.
+    pane.getChildren().add(skipButton);
+  }*/
 }

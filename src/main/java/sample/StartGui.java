@@ -139,14 +139,10 @@ public class StartGui {
   /*void createGame(ActionEvent event) {
       try {
         if(playersInt!=0 && robotsInt != -1) {
-          //TODO komentarz
-          System.out.println("players: "+playersInt+" robots: "+robotsInt);
           Main.getCounter().createGame(playersInt, robotsInt, startPane);
           VBox pane=FXMLLoader.load(getClass().getResource("/waitingWindow.fxml"));
           startPane.getChildren().setAll(pane);
           startPane.getChildren().setAll(Main.getCounter().getScene().getRoot());
-        } else {
-          System.out.println("playersInt jest 0");
         }
       } catch (IOException e) {
         System.out.println(e.getMessage());
@@ -158,16 +154,12 @@ public class StartGui {
 
   void createGame(ActionEvent event) {
     try {
-      if(playersInt!=0 && robotsInt != -1) {
-        //TODO komentarz
-        System.out.println("players: "+playersInt+" robots: "+robotsInt);
+      if (playersInt != 0 && robotsInt != -1) {
         Main.getCounter().createGame(playersInt, robotsInt, startPane);
-        VBox pane=FXMLLoader.load(getClass().getResource("/waitingWindow.fxml"));
+        VBox pane = FXMLLoader.load(getClass().getResource("/waitingWindow.fxml"));
         startPane.getChildren().setAll(pane);
         Main.getCounter().startGame();
-        Main.getCounter().yourTurn();
-      } else {
-        System.out.println("playersInt jest 0");
+        //Main.getCounter().yourTurn();
       }
     } catch (IOException e) {
       System.out.println(e.getMessage());
