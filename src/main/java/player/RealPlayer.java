@@ -43,8 +43,6 @@ public class RealPlayer implements Player {
   @SuppressWarnings("Duplicates")
   //!!!
   public void addPlayer(int id) {
-    System.out.println("dodawanie");
-    System.out.println(id);
     int idd;
     int a = playerId - 1;
 
@@ -93,14 +91,11 @@ public class RealPlayer implements Player {
         break;
       }
       case 3:
-        System.out.println("start 3");
         for (y = pawns, i = 0; i < pawns;i++) {
-          System.out.println(i);
           for (x = pawns, j = 0; j < pawns - i; j++) {
             newPawn = new Pawn(x + j, y + i, id);
             xx = rows.get(y + i).get(x + j).getCenterX();
             yy = rows.get(y + i).get(x + j).getCenterY();
-            System.out.println(xx);
             newPawn.setCenterX(xx);
             newPawn.setCenterY(yy);
             rows.get(y + i).get(x + j).setPawn(newPawn);
@@ -169,6 +164,7 @@ public class RealPlayer implements Player {
 
   public void setMyTurn(boolean myTurn) {
     this.myTurn = myTurn;
+    board.setMyTurn(myTurn);
   }
 
   public Scene getScene() {

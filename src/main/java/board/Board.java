@@ -1,6 +1,7 @@
 package board;
 
 
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -22,7 +23,8 @@ public class Board {
   private boolean fieldClicked;
   private Pawn chosenPawn;
   private Hexagon oldHex, newHex;
-  RealPlayer player;
+  private RealPlayer player;
+  private boolean myTurn;
 
 
 
@@ -40,6 +42,7 @@ public class Board {
     pawnsList = new ArrayList<Pawn>();
     fieldClicked = false;
     chosenPawn = null;
+    myTurn = false;
 
 
     rows = new ArrayList<ArrayList<Hexagon>>();
@@ -61,37 +64,44 @@ public class Board {
   }
 
   private void paneEvent(Pane pane) {
-    pane.setOnMouseClicked(e -> {
-      if (!fieldClicked) {
-        oldHex = findField(e.getX(),e.getY());
-        if (oldHex.getPawn() != null && oldHex.getPawn().getPlayerId()==playerId) {
-          chosenPawn = oldHex.getPawn();
-          chosenPawn.setFill(chosenPawn.getColor().darker());
-          fieldClicked = true;
-        }
-      } else {
-        if (chosenPawn != null && oldHex != null) {
-          newHex = findField(e.getX(),e.getY());
-          if (newHex.getPawn() == null) {
-            boolean move = isMoveValid(oldHex.getX(), oldHex.getY(),
-              newHex.getX(), newHex.getY());
-            if (move) {
-              chosenPawn.setCenterX(newHex.getCenterX());
-              chosenPawn.setCenterY(newHex.getCenterY());
-              newHex.setPawn(chosenPawn);
-              oldHex.setAsEmpty();
-              chosenPawn.setFill(chosenPawn.getColor());
+    Platform.runLater(() -> {
+      pane.setOnMouseClicked(e -> {
+        if (myTurn) {
+          if (!fieldClicked) {
+            oldHex = findField(e.getX(),e.getY());
+            if (oldHex.getPawn() != null && oldHex.getPawn().getPlayerId() == playerId) {
+              chosenPawn = oldHex.getPawn();
+              chosenPawn.setFill(chosenPawn.getColor().darker());
+              fieldClicked = true;
             }
+          } else {
+            if (chosenPawn != null && oldHex != null) {
+              newHex = findField(e.getX(),e.getY());
+              if (newHex.getPawn() == null) {
+                boolean move = isMoveValid(oldHex.getX(), oldHex.getY(),
+                  newHex.getX(), newHex.getY());
+                if (move) {
+                  chosenPawn.setCenterX(newHex.getCenterX());
+                  chosenPawn.setCenterY(newHex.getCenterY());
+                  newHex.setPawn(chosenPawn);
+                  oldHex.setAsEmpty();
+                  chosenPawn.setFill(chosenPawn.getColor());
+                }
+              }
+              chosenPawn.setFill(chosenPawn.getColor());
+              chosenPawn = null;
+              newHex = null;
+            }
+            oldHex = null;
+            fieldClicked = false;
           }
-          chosenPawn.setFill(chosenPawn.getColor());
-          chosenPawn = null;
-          newHex = null;
         }
-        oldHex = null;
-        fieldClicked = false;
-      }
+
+
+      });
 
     });
+
   }
 
   private void paintBoard() {
@@ -245,9 +255,6 @@ public class Board {
   public void addPawns(ArrayList<Pawn> pawns) {
     for(int i=0; i<pawns.size();i++){
       pane.getChildren().add(pawns.get(i));
-      System.out.println(i);
-      System.out.println(pawns.get(i).getCenterX());
-
     }
   }
 
@@ -301,5 +308,9 @@ public class Board {
    */
   private boolean isMoveValid (int fromX, int fromY, int toX, int toY) {
     return player.isMoveValid(fromX,fromY,toX,toY);
+  }
+
+  public void setMyTurn(boolean myTurn) {
+    this.myTurn=myTurn;
   }
 }
