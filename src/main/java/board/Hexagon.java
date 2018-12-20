@@ -6,13 +6,13 @@ import javafx.scene.shape.Polygon;
 import java.util.ArrayList;
 
 public class Hexagon extends Polygon {
-  private double x;
-  private double y;
+  private int x;
+  private int y;
   private boolean isField;
   private Pawn pawn;
   private double[] points;
 
-  Hexagon(double x, double y) {
+  Hexagon(int x, int y) {
 
     super (x+10, y+32, x+25, y+41, x+40, y+32, x+40, y+14, x+25, y+5, x+10, y+14);
 
@@ -88,12 +88,12 @@ public class Hexagon extends Polygon {
     return isField;
   }
 
-  public double getX()
+  public int getX()
   {
     return x;
   }
 
-  public double getY() {
+  public int getY() {
     return y;
   }
 

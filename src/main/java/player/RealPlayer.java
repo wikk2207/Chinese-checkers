@@ -5,6 +5,7 @@ import board.BoardException;
 import board.Hexagon;
 import board.Pawn;
 import javafx.scene.Scene;
+import sample.Counter;
 
 import java.util.ArrayList;
 
@@ -15,9 +16,11 @@ public class RealPlayer implements Player {
   private boolean myTurn;
   private int pawns;
   private ArrayList<ArrayList<Hexagon>> rows;
+  Counter counter;
 
-  public RealPlayer() {
+  public RealPlayer(Counter counter) {
     myTurn = false;
+    this.counter=counter;
   }
 
   /**
@@ -25,7 +28,7 @@ public class RealPlayer implements Player {
    */
   public void createBoard() {
     try {
-      board = new Board(size, playerId);
+      board = new Board(size, playerId, this);
       rows = board.getRows();
     } catch (BoardException x) {
       System.out.println(x.getMessage());
@@ -38,9 +41,19 @@ public class RealPlayer implements Player {
    */
 
   @SuppressWarnings("Duplicates")
+  //!!!
   public void addPlayer(int id) {
     System.out.println("dodawanie");
     System.out.println(id);
+    int idd;
+    int a = playerId - 1;
+
+    if(id > playerId) {
+      idd = id - a;
+    } else {
+      idd = id + 6 - a;
+    }
+
     ArrayList<Pawn> pawnsList = new ArrayList<>();
     int x;
     int y;
@@ -49,11 +62,11 @@ public class RealPlayer implements Player {
     double xx;
     double yy;
     Pawn newPawn;
-    switch (id) {
+    switch (idd) {
       case 1: {
         for (i = 0, y = size - pawns; i < pawns; i++) {
           for (j = 0, x = pawns; j < pawns - i; j++) {
-            newPawn = new Pawn(y + i, x + j, playerId);
+            newPawn = new Pawn(y + i, x + j, id);
             xx = rows.get(y + i).get(x + j).getCenterX();
             yy = rows.get(y + i).get(x + j).getCenterY();
             newPawn.setCenterX(xx);
@@ -68,7 +81,7 @@ public class RealPlayer implements Player {
       case 2: {
         for (i = 0, y = size - pawns - 1; i < pawns;i++) {
           for (x = pawns - 1, j = 0; j < pawns - i; j++) {
-            newPawn = new Pawn(x - j, y - i, playerId);
+            newPawn = new Pawn(x - j, y - i, id);
             xx = rows.get(y - i).get(x - j).getCenterX();
             yy = rows.get(y - i).get(x - j).getCenterY();
             newPawn.setCenterY(yy);
@@ -84,7 +97,7 @@ public class RealPlayer implements Player {
         for (y = pawns, i = 0; i < pawns;i++) {
           System.out.println(i);
           for (x = pawns, j = 0; j < pawns - i; j++) {
-            newPawn = new Pawn(x + j, y + i, playerId);
+            newPawn = new Pawn(x + j, y + i, id);
             xx = rows.get(y + i).get(x + j).getCenterX();
             yy = rows.get(y + i).get(x + j).getCenterY();
             System.out.println(xx);
@@ -99,7 +112,7 @@ public class RealPlayer implements Player {
       case 4: {
         for (y = pawns - 1, i = 0; i < pawns; i++) {
           for (x = size - pawns - 1, j = 0; j < pawns - i; j++) {
-            newPawn = new Pawn(y - i, x - j, playerId);
+            newPawn = new Pawn(y - i, x - j, id);
             xx = rows.get(y - i).get(x - j).getCenterX();
             yy = rows.get(y - i).get(x - j).getCenterY();
             newPawn.setCenterX(xx);
@@ -114,7 +127,7 @@ public class RealPlayer implements Player {
       case 5: {
         for (y = pawns, i = 0; i < pawns; i++) {
           for (x = size - pawns, j = 0; j < pawns - i; j++) {
-            newPawn = new Pawn(y + i, x + j, playerId);
+            newPawn = new Pawn(y + i, x + j, id);
             xx = rows.get(y + i).get(x + j).getCenterX();
             yy = rows.get(y + i).get(x + j).getCenterY();
             newPawn.setCenterX(xx);
@@ -129,7 +142,7 @@ public class RealPlayer implements Player {
 
         for (y = size - pawns - 1, i = 0; i < pawns; i++) {
           for (x = size - pawns - 1, j = 0; j < pawns - i; j++) {
-            newPawn = new Pawn(y - i, x - j, playerId);
+            newPawn = new Pawn(y - i, x - j, id);
             xx = rows.get(y - i).get(x - j).getCenterX();
             yy = rows.get(y - i).get(x - j).getCenterY();
             newPawn.setCenterX(xx);
@@ -165,6 +178,8 @@ public class RealPlayer implements Player {
   public void uploadMove(int playerId, int fromX, int fromY, int toX, int toY) {
     board.uploadMove(playerId, fromX, fromY, toX, toY);
   }
-
+  public boolean isMoveValid (int fromX, int fromY, int toX, int toY) {
+    return counter.isMoveValid(fromX,fromY,toX,toY);
+  }
 
 }

@@ -8,17 +8,18 @@ import player.RealPlayer;
 public class Counter {
   Player player;
 
-  Counter(boolean isReal) {
-    if (isReal) {
-      player = new RealPlayer();
-    } else {
-      player = new Boot();
-    }
+  Counter() {
+      player = new RealPlayer(this);
 
     setPlayerId(1);
     setBoardSize(17);
     createBoard();
+    player.addPlayer(2);
+    player.addPlayer(5);
     player.addPlayer(3);
+    player.addPlayer(6);
+    player.addPlayer(4);
+
   }
 
   /**
@@ -58,5 +59,8 @@ public class Counter {
     return player.getScene();
   }
 
+  public boolean isMoveValid (int fromX, int fromY, int toX, int toY) {
+    return true;
+  }
 
 }

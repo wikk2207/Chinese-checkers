@@ -16,7 +16,7 @@ public class Main extends Application {
 
   @Override
   public void start(Stage primaryStage) {
-      counter = new Counter(true);
+      counter = new Counter();
       counter.setPlayerId(getMyId());
       counter.setBoardSize(17);
       stage = primaryStage;

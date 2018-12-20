@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import player.Player;
+import player.RealPlayer;
 
 import java.util.ArrayList;
 
@@ -21,22 +22,24 @@ public class Board {
   private boolean fieldClicked;
   private Pawn chosenPawn;
   private Hexagon oldHex, newHex;
+  RealPlayer player;
 
 
 
 
-  public Board(int size, int playerID) throws BoardException{
-    if(size%4!=1) {
+  public Board(int size, int playerID, RealPlayer player) throws BoardException {
+    if (size % 4 != 1) {
       throw new BoardException("Invalid size of board. It should be number x which: x%4=1");
     }
-    this.size=size;
-    pawns = (size-1)/4;
+    this.size = size;
+    pawns = (size - 1) / 4;
+    this.player = player;
 
-    this.playerId=playerID;
-    this.colors=Colors.getColors(playerID);
+    this.playerId = playerID;
+    this.colors = Colors.getColors(playerID);
     pawnsList = new ArrayList<Pawn>();
-    fieldClicked=false;
-    chosenPawn=null;
+    fieldClicked = false;
+    chosenPawn = null;
 
 
     rows = new ArrayList<ArrayList<Hexagon>>();
@@ -70,7 +73,7 @@ public class Board {
         if (chosenPawn != null && oldHex != null) {
           newHex = findField(e.getX(),e.getY());
           if (newHex.getPawn() == null) {
-            boolean move = Player.isMoveValid(oldHex.getX(), oldHex.getY(),
+            boolean move = isMoveValid(oldHex.getX(), oldHex.getY(),
               newHex.getX(), newHex.getY());
             if (move) {
               chosenPawn.setCenterX(newHex.getCenterX());
@@ -216,7 +219,7 @@ public class Board {
 
         pawn.setOnMouseReleased(eee->{
           final Hexagon newHex = findField(eee.getX(), eee.getY());
-          if(newHex!=null&&newHex.getPawn()==null&&Player.isMoveValid(oldHex.getX(), oldHex.getY(), newHex.getX(), newHex.getY())){
+          if(newHex!=null&&newHex.getPawn()==null&&isMoveValid(oldHex.getX(), oldHex.getY(), newHex.getX(), newHex.getY())){
             pawn.setCenterX(newHex.getCenterX());
             pawn.setCenterY(newHex.getCenterY());
             oldHex.setAsEmpty();
@@ -285,5 +288,18 @@ public class Board {
     fromField.getPawn().move(toX, toY);
     toField.setPawn(fromField.getPawn());
     fromField.setAsEmpty();
+  }
+
+  /**
+   * Checking if move is valid (following game rules).
+   *
+   * @param fromX X coordinate of field when pawn starts move
+   * @param fromY Y coordinate of field when pawn starts move
+   * @param toX   X coordinate of field when pawn ends move
+   * @param toY   Y coordinate of field when pawn ends move
+   * @return
+   */
+  private boolean isMoveValid (int fromX, int fromY, int toX, int toY) {
+    return player.isMoveValid(fromX,fromY,toX,toY);
   }
 }
