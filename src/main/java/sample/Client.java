@@ -11,6 +11,7 @@ public class Client {
   private final String SET_ID = "ID";
   private final String SET_OPPONENTS = "OPPONENTS";
   private final String SET_NUMBER_OF_PLAYERS = "CREATE_GAME";
+  private final String JOINED_TO_GAME = "JOIN_GAME";
   private final String OPPONENT_MOVED = "OPPONENT_MOVED";
   private final String YOUR_TURN = "YOUR_TURN";
   private final String TURN_END = "TURN_END";
@@ -28,17 +29,35 @@ public class Client {
   private Counter counter;
 
   boolean run;
+  boolean first_set = false;
 
   private static final int PORT = 9931;
   private static final String HOST = "localhost";
 
   public Client(Counter counter) {
+    String response;
     this.counter = counter;
     run = true;
     try {
       socket = new Socket(HOST, PORT);
       input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       output = new PrintWriter(socket.getOutputStream(), true);
+      while(!first_set) {
+        response = input.readLine();
+        if (response.startsWith(SET_ID)) {
+          try {
+            counter.setId(Integer.parseInt(response.substring(SET_ID.length() + 1)));
+          } catch (NumberFormatException e) {
+            System.err.println("Zły format ID");
+          }
+        } else if (response.equals(SET_NUMBER_OF_PLAYERS)) {
+          counter.setFirst(true);
+          first_set = true;
+        } else if (response.equals(JOINED_TO_GAME)) {
+          counter.setFirst(false);
+          first_set = true;
+        }
+      }
     } catch (IOException e) {
       System.err.println("Nie znaleziono serwera");
       System.exit(1);
@@ -55,13 +74,7 @@ public class Client {
         System.out.println("READY TO READ");
         response = input.readLine();
         //Do zweryfikowania przez Wiktorię
-        if (response.startsWith(SET_ID)) {
-          try {
-            counter.setId(Integer.parseInt(response.substring(SET_ID.length() + 1)));
-          } catch (NumberFormatException e) {
-            System.err.println("Zły format ID");
-          }
-        } else if (response.startsWith(SET_OPPONENTS)) {
+        if (response.startsWith(SET_OPPONENTS)) {
           try {
             counter.setNumberOfPlayers(
                 Integer.parseInt(response.substring(SET_OPPONENTS.length() + 1))
@@ -69,9 +82,8 @@ public class Client {
           } catch (NumberFormatException e) {
             System.err.println("Zły format SET_OPPONENTS");
           }
-        } else if (response.equals(SET_NUMBER_OF_PLAYERS)) {
-          counter.setFirst(true);
-        } else if (response.startsWith(OPPONENT_MOVED)) {
+        }
+        else if (response.startsWith(OPPONENT_MOVED)) {
           String[] arguments = response.split(" ");
           try {
             counter.uploadMove(
