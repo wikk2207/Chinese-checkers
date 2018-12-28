@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class Client {
+public class Client extends Thread{
 
   private final String SET_ID = "ID";
   private final String SET_OPPONENTS = "OPPONENTS";
@@ -67,7 +67,7 @@ public class Client {
   /**
    * Metoda uruchamiana w chwili uruchomienia aplikacji gracza
    */
-  public void play() {
+  public void run() {
     String response;
     try {
       while (run) {
@@ -98,13 +98,18 @@ public class Client {
           }
         } else if (response.equals(YOUR_TURN)) {
           counter.yourTurn();
+          System.out.println(response);
         } else if (response.equals(TURN_END)) {
+          System.out.println(response);
           counter.turnEnd();
         } else if (response.equals(START_GAME)) {
+          System.out.println(response);
           counter.startGame();
         } else if (response.equals(WRONG_MOVE)) {
+          System.out.println(response);
           counter.wrongMove();
         } else if (response.equals(CORRECT_MOVE)) {
+          System.out.println(response);
           counter.correctMove();
       }
       }
