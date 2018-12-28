@@ -16,9 +16,10 @@ public class Main extends Application {
 
   @Override
   public void start(Stage primaryStage) {
-      counter = new Counter();
-      counter.setBoardSize(17);
+
       stage = primaryStage;
+
+
 
       //TODO nie widzi mnie jako pierwszego gracza!
       if(counter.amIFirst()) {
@@ -46,6 +47,9 @@ public class Main extends Application {
   }
 
   public static void main(String[] args) {
+    counter = new Counter();
+    counter.setBoardSize(17);
+    counter.runServerListener();
     launch(args);
   }
 

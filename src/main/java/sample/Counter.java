@@ -138,6 +138,11 @@ public class Counter {
   public void correctMove() {
     correctMove = true;
   }
+
+  //Dodana przez matika ;-)
+  public void runServerListener() {
+    client.start();
+  }
 }
 
 
