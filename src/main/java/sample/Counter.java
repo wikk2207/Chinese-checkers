@@ -2,89 +2,89 @@ package sample;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
-import player.Boot;
 import player.Player;
 import player.RealPlayer;
 
 public class Counter {
-  Player player;
-  VBox pane;
-  Client client;
-  boolean correctMove;
-  int id;
-  boolean amIFirst;
+  private Player player;
+  private VBox pane;
+  private Client client;
+  private boolean correctMove;
+  private boolean amIFirst;
+
 
   Counter() {
-    player=new RealPlayer(this);
-    client=new Client(this);
-    correctMove=false;
-
-    setPlayerId(1);
-    setBoardSize(17);
+    player = new RealPlayer(this);
+    client = new Client(this);
     createBoard();
   }
 
-
-  public void setPlayerId(int id) {
-    player.setId(id);
-  }
-
-  public void setBoardSize(int size) {
-    player.setBoardSize(size);
-  }
 
   public void addPlayer(int playerId) {
     player.addPlayer(playerId);
   }
 
-  public void createBoard() {
-    player.createBoard();
+  public int getMyId() {
+    return player.getId();
   }
 
-  public Scene getScene() {
-    return player.getScene();
-  }
 
-  public boolean isMoveValid(int fromX, int fromY, int toX, int toY) {
-    //TODO ta metoda powinna zmieniać parametr correctMove
-    client.move(fromX, fromY, toX, toY);
-    return correctMove;
+  //METHODS USED BY MAIN
+
+  public void setBoardSize(int size) {
+    player.setBoardSize(size);
   }
 
   public boolean amIFirst() {
     return amIFirst;
   }
 
-  public int getMyId() {
-    return id;
+  public void createBoard() {
+    player.createBoard();
   }
-
 
   //METHODS USING CLIENT
 
   /**
-   * Method used by
+   * Method used by STARTGUI class.
    *
-   * @param players
-   * @param robots
-   * @param pane
+   * @param players Number of players (real + robots).
+   * @param robots Number of robots.
+   * @param pane Pane from window which is element of startGui.
    */
   public void createGame(int players, int robots, VBox pane) {
     client.setNumOfPlayers(players, robots);
-    this.pane=pane;
+    this.pane = pane;
   }
 
+  /**
+   * Method used by player to check if his move is permitted.
+   * @param fromX Coordinate X of field where player starts move.
+   * @param fromY Coordinate Y of field where player starts move.
+   * @param toX Coordinate X of field where player ends move.
+   * @param toY Coordinate Y of field where player ends move.
+   * @return True if move is correct and if not - false.
+   */
+  public boolean isMovePermitted(int fromX, int fromY, int toX, int toY) {
+    //TODO ta metoda powinna zmieniać parametr correctMove
+    client.move(fromX, fromY, toX, toY);
+    return correctMove;
+  }
 
   //METHODS USED BY CLIENT
 
   public void setId(int id) {
-    this.id=id;
+    player.setId(id);
   }
 
   public void set_First(boolean isFirst) {
-    this.amIFirst=isFirst;
+    this.amIFirst = isFirst;
   }
 
+  /**
+   * Set number of players in this game.
+   * @param players Number of players.
+   */
   public void setNumberOfPlayers(int players) {
     switch (players) {
       case 2:
@@ -106,6 +106,8 @@ public class Counter {
         player.addPlayer(6);
         player.addPlayer(4);
         break;
+      default:
+        break;
     }
   }
 
@@ -114,7 +116,7 @@ public class Counter {
   }
 
   /**
-   *
+   * Set my turn as true.
    */
   public void yourTurn() {
     player.setMyTurn(true);
@@ -125,15 +127,16 @@ public class Counter {
   }
 
   public void startGame() {
-    pane.getChildren().setAll(Main.getCounter().getScene().getRoot());
+    Scene scene = player.getScene();
+    pane.getChildren().setAll(scene.getRoot());
   }
 
   public void wrongMove() {
-    correctMove=false;
+    correctMove = false;
   }
 
   public void correctMove() {
-    correctMove=true;
+    correctMove = true;
   }
 }
 

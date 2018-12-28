@@ -20,4 +20,5 @@ public interface Player {
   void addPlayer(int playerId);
   void createBoard();
   void uploadMove(int playerId, int fromX, int fromY, int toX, int toY);
+  int getId();
 }

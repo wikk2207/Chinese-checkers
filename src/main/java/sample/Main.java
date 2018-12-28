@@ -17,7 +17,7 @@ public class Main extends Application {
   @Override
   public void start(Stage primaryStage) {
       counter = new Counter();
-      counter.setPlayerId(counter.getMyId());
+      //counter.setId(counter.getMyId());
       counter.setBoardSize(17);
       stage = primaryStage;
 
@@ -43,11 +43,11 @@ public class Main extends Application {
     launch(args);
   }
 
-   void createGame(int players, int robots) {
+   /*void createGame(int players, int robots) {
     counter.createBoard();
-    counter.addPlayer(2);
+    //counter.addPlayer(2);
     stage.setScene(counter.getScene());
-  }
+  }*/
 
   public static Counter getCounter() {
     return counter;

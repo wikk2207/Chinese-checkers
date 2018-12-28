@@ -178,4 +178,7 @@ public class RealPlayer implements Player {
     return counter.isMoveValid(fromX,fromY,toX,toY);
   }
 
+  public int getId() {
+    return playerId;
+  }
 }

@@ -158,7 +158,7 @@ public class StartGui {
         Main.getCounter().createGame(playersInt, robotsInt, startPane);
         VBox pane = FXMLLoader.load(getClass().getResource("/waitingWindow.fxml"));
         startPane.getChildren().setAll(pane);
-        Main.getCounter().startGame();
+        //Main.getCounter().startGame();
         //Main.getCounter().yourTurn();
       }
     } catch (IOException e) {
