@@ -48,5 +48,10 @@ public class Boot implements Player {
 
   }
 
+  @Override
+  public int getId() {
+    return 0;
+  }
+
 
 }

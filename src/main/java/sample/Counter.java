@@ -16,7 +16,6 @@ public class Counter {
   Counter() {
     player = new RealPlayer(this);
     client = new Client(this);
-    createBoard();
   }
 
 
@@ -77,7 +76,7 @@ public class Counter {
     player.setId(id);
   }
 
-  public void set_First(boolean isFirst) {
+  public void setFirst(boolean isFirst) {
     this.amIFirst = isFirst;
   }
 
@@ -127,6 +126,7 @@ public class Counter {
   }
 
   public void startGame() {
+    createBoard();
     Scene scene = player.getScene();
     pane.getChildren().setAll(scene.getRoot());
   }

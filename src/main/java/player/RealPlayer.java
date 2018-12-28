@@ -174,8 +174,8 @@ public class RealPlayer implements Player {
   public void uploadMove(int playerId, int fromX, int fromY, int toX, int toY) {
     board.uploadMove(playerId, fromX, fromY, toX, toY);
   }
-  public boolean isMoveValid (int fromX, int fromY, int toX, int toY) {
-    return counter.isMoveValid(fromX,fromY,toX,toY);
+  public boolean isMovePermitted (int fromX, int fromY, int toX, int toY) {
+    return counter.isMovePermitted(fromX,fromY,toX,toY);
   }
 
   public int getId() {
