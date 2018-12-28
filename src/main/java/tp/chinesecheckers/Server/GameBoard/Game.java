@@ -17,7 +17,7 @@ public class Game {
   private boolean setRules;
 
   private int currentPlayer;
-  private int realPlayerNum;
+  private int allPlayerNum;
   private int bootNum;
   private int iterator;
   private int begX;
@@ -40,8 +40,8 @@ public class Game {
   }
 
   /**
-   *
-   * @param socket
+   * Metoda tworzy pierwszego gracza wybierającego ilość graczy i tryb gry
+   * @param socket Wtyczka pierwszego gracza
    */
   public void setFirst(Socket socket) {
     this.first = new RealPlayer(this, socket, 1);
@@ -58,8 +58,7 @@ public class Game {
 
   /**
    *
-   * @param players
-   * @param boots
+   * @param num
    */
 
   private void setIDs(int num) {
@@ -94,14 +93,14 @@ public class Game {
 
   public void setRules(String players, String boots) {
     try {
-      realPlayerNum = Integer.parseInt(players);
+      allPlayerNum = Integer.parseInt(players);
       bootNum = Integer.parseInt(boots);
-      this.players = new Player[bootNum + realPlayerNum];
-      setIDs(bootNum + realPlayerNum);
+      this.players = new Player[allPlayerNum];
+      setIDs(allPlayerNum);
       this.players[0] = first;
       setRules = true;
       master.setGameMode(1);
-      master.setPlayerNumber(bootNum + realPlayerNum);
+      master.setPlayerNumber(allPlayerNum);
     } catch (NumberFormatException e) {
       System.err.println("Wrong player number");
     }
@@ -112,7 +111,7 @@ public class Game {
    * @return
    */
   public int howManyPlayers() {
-    return realPlayerNum;
+    return allPlayerNum - bootNum;
   }
 
   /**
@@ -121,6 +120,7 @@ public class Game {
    */
   public void addPlayer(Socket socket) {
     players[iterator] = new RealPlayer(this, socket, IDs[iterator]);
+    players[iterator].setOpponetsNum(allPlayerNum);
     iterator++;
   }
 
