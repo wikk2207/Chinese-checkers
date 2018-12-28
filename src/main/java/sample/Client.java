@@ -25,7 +25,7 @@ public class Client {
   private Socket socket;
   private BufferedReader input;
   private PrintWriter output;
-  private Counter couter;
+  private Counter counter;
 
   boolean run;
 
@@ -33,7 +33,7 @@ public class Client {
   private static final String HOST = "localhost";
 
   public Client(Counter counter) {
-    this.couter = counter;
+    this.counter = counter;
     run = true;
     try {
       socket = new Socket(HOST, PORT);
@@ -45,31 +45,56 @@ public class Client {
     }
   }
 
+  /**
+   * Metoda uruchamiana w chwili uruchomienia aplikacji gracza
+   */
   public void play() {
     String response;
     try {
       while (run) {
         System.out.println("READY TO READ");
         response = input.readLine();
+        //Do zweryfikowania przez Wiktorię
         if (response.startsWith(SET_ID)) {
-          //TODO wywołanie metody counter
+          try {
+            counter.setId(Integer.parseInt(response.substring(SET_ID.length() + 1)));
+          } catch (NumberFormatException e) {
+            System.err.println("Zły format ID");
+          }
         } else if (response.startsWith(SET_OPPONENTS)) {
-          //TODO wywołanie metody counter
+          try {
+            counter.setNumberOfPlayers(
+                Integer.parseInt(response.substring(SET_OPPONENTS.length() + 1))
+            );
+          } catch (NumberFormatException e) {
+            System.err.println("Zły format SET_OPPONENTS");
+          }
         } else if (response.equals(SET_NUMBER_OF_PLAYERS)) {
-          //TODO wywołanie metody counter
+          counter.set_First(true);
         } else if (response.startsWith(OPPONENT_MOVED)) {
-          //TODO wywołanie metody counter
+          String[] arguments = response.split(" ");
+          try {
+            counter.uploadMove(
+                Integer.parseInt(arguments[1]),
+                Integer.parseInt(arguments[2]),
+                Integer.parseInt(arguments[3]),
+                Integer.parseInt(arguments[4]),
+                Integer.parseInt(arguments[5])
+            );
+          } catch (NumberFormatException e) {
+            System.err.println("Zły format SET_OPPONENTS");
+          }
         } else if (response.equals(YOUR_TURN)) {
-          //TODO wywołanie metody counter
+          counter.yourTurn();
         } else if (response.equals(TURN_END)) {
-          //TODO wywołanie metody counter
+          counter.turnEnd();
         } else if (response.equals(START_GAME)) {
-          //TODO wywołanie metody counter
+          counter.startGame();
         } else if (response.equals(WRONG_MOVE)) {
-          //TODO wywołanie metody counter
+          counter.wrongMove();
         } else if (response.equals(CORRECT_MOVE)) {
-          //TODO wywołanie metody counter
-        }
+          counter.correctMove();
+      }
       }
     } catch (IOException e) {
       System.err.println("Lost conection with server");
@@ -77,16 +102,31 @@ public class Client {
     }
   }
 
+  /**
+   * Metoda uruchamiana przez pierwszego gracza, informuje server o liczbie graczy oraz bootow
+   * @param players Liczba wszystkich graczy
+   * @param boots Liczba bootów
+   */
   public void setNumOfPlayers(int players, int boots) {
     output.println(NUM_OF_PLAYERS + " " + (players - boots) + " " + boots);
     System.out.println(NUM_OF_PLAYERS + " " + (players - boots) + " " + boots);
   }
 
+  /**
+   * Metoda wykonywana przez gracza w chwili przemieszczania pionka
+   * @param begX Pierwsza wspolrzedna początku ruchu
+   * @param begY Druga wspolrzedna początku ruchu
+   * @param endX Pierwsza wspolrzedna konca ruchu
+   * @param endY Druga wspolrzedna konca ruchu
+   */
   public void move(int begX, int begY, int endX, int endY) {
     output.println(MOVED + " " + begX + " " + begY + " " + endX + " " + endY);
     System.out.println(MOVED + " " + begX + " " + begY + " " + endX + " " + endY);
   }
 
+  /**
+   * Metoda uruchamiana przez gracza w chwili zakonczenia ruchu
+   */
   public void endMove() {
     output.println(END_MOVE);
   }
