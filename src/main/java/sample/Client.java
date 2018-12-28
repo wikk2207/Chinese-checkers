@@ -18,7 +18,7 @@ public class Client {
   private final String WRONG_MOVE = "WRONG_MOVE";
   private final String CORRECT_MOVE = "CORRECT_MOVE";
 
-  public final String NUM_OF_PLAYERS = "PLAYERS";//<realPlayersNum> <bootNum>
+  public final String NUM_OF_PLAYERS = "PLAYERS";//<allPlayersNum> <bootNum>
   public final String MOVED = "MOVE";
   public final String END_MOVE = "END_MOVE";
 
