@@ -8,4 +8,6 @@ public interface Player {
   void yourTurn();
 
   void turnEnd();
+
+  void setOpponetsNum(int players);
 }

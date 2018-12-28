@@ -8,14 +8,17 @@ import java.net.Socket;
 
 public class RealPlayer extends Thread implements Player {
   private final String SET_ID = "ID";
+  private final String SET_OPPONENTS = "OPPONENTS";
   private final String SET_NUMBER_OF_PLAYERS = "CREATE_GAME";
   private final String OPPONENT_MOVED = "OPPONENT_MOVED";
   private final String YOUR_TURN = "YOUR_TURN";
   private final String TURN_END = "TURN_END";
   private final String START_GAME = "START_GAME";
   private final String WRONG_MOVE = "WRONG_MOVE";
+  private final String CORRECT_MOVE = "CORRECT_MOVE";
+  private final String JOINED_TO_GAME = "JOIN_GAME";
 
-  public final String NUM_OF_PLAYERS = "PLAYERS: ";//<realPlayersNum> <bootNum>
+  public final String NUM_OF_PLAYERS = "PLAYERS";//<allPlayersNum> <bootNum>
   public final String MOVED = "MOVE";
   public final String END_MOVE = "END_MOVE";
 
@@ -42,7 +45,7 @@ public class RealPlayer extends Thread implements Player {
       output.println(SET_ID + " " + id);
       if(id == 1) {
 
-        System.out.println("polaaczono z klientem");
+        System.out.println("polaczono z klientem");
         output.println(SET_NUMBER_OF_PLAYERS);
         System.out.println("Wyslano prosbe o utowrzenie gry");
 
@@ -56,6 +59,8 @@ public class RealPlayer extends Thread implements Player {
             break;
           }
         }
+      } else {
+        output.println(JOINED_TO_GAME);
       }
     } catch (IOException e) {
       System.err.println("Player is dead:" + e);
@@ -71,6 +76,11 @@ public class RealPlayer extends Thread implements Player {
   @Override
   public void yourTurn() {
     output.println(YOUR_TURN);
+  }
+
+  @Override
+  public void setOpponetsNum(int players) {
+    output.println(SET_OPPONENTS + " " + players);
   }
 
   @Override
@@ -102,6 +112,8 @@ public class RealPlayer extends Thread implements Player {
           }
           if (!game.move(id, cordinates[0], cordinates[1], cordinates[2], cordinates[3])) {
             output.println(WRONG_MOVE);
+          } else {
+            output.println(CORRECT_MOVE);
           }
         } else if (command.equals(END_MOVE)) {
           game.endMove(id);
