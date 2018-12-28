@@ -17,9 +17,15 @@ public class Main extends Application {
   @Override
   public void start(Stage primaryStage) {
       counter = new Counter();
-      counter.setPlayerId(counter.getMyId());
       counter.setBoardSize(17);
       stage = primaryStage;
+
+      //TODO nie widzi mnie jako pierwszego gracza!
+      if(counter.amIFirst()) {
+        System.out.println("first");
+      } else {
+        System.out.println("not first");
+      }
 
       try {
         if (counter.amIFirst()) {
@@ -43,11 +49,11 @@ public class Main extends Application {
     launch(args);
   }
 
-   void createGame(int players, int robots) {
+   /*void createGame(int players, int robots) {
     counter.createBoard();
-    counter.addPlayer(2);
+    //counter.addPlayer(2);
     stage.setScene(counter.getScene());
-  }
+  }*/
 
   public static Counter getCounter() {
     return counter;

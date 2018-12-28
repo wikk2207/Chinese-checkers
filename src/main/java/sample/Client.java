@@ -70,7 +70,7 @@ public class Client {
             System.err.println("Zły format SET_OPPONENTS");
           }
         } else if (response.equals(SET_NUMBER_OF_PLAYERS)) {
-          counter.set_First(true);
+          counter.setFirst(true);
         } else if (response.startsWith(OPPONENT_MOVED)) {
           String[] arguments = response.split(" ");
           try {

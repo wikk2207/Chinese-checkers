@@ -80,7 +80,7 @@ public class Board {
             if (chosenPawn != null && oldHex != null) {
               newHex = findField(e.getX(),e.getY());
               if (newHex.getPawn() == null) {
-                boolean move = isMoveValid(oldHex.getX(), oldHex.getY(),
+                boolean move = isMovePermitted(oldHex.getX(), oldHex.getY(),
                   newHex.getX(), newHex.getY());
                 if (move) {
                   chosenPawn.setCenterX(newHex.getCenterX());
@@ -223,15 +223,15 @@ public class Board {
 
   private void addMoveToPawn(Pawn pawn) {
 
-    pawn.setOnDragDetected(e->{
+    pawn.setOnDragDetected(e -> {
       final Hexagon oldHex = findField(e.getX(), e.getY());
-      pawn.setOnMouseDragged(ee->{
+      pawn.setOnMouseDragged(ee -> {
         pawn.setCenterX(ee.getX());
         pawn.setCenterY(ee.getY());
 
-        pawn.setOnMouseReleased(eee->{
+        pawn.setOnMouseReleased(eee -> {
           final Hexagon newHex = findField(eee.getX(), eee.getY());
-          if(newHex!=null&&newHex.getPawn()==null&&isMoveValid(oldHex.getX(), oldHex.getY(), newHex.getX(), newHex.getY())){
+          if (newHex != null && newHex.getPawn() == null && isMovePermitted(oldHex.getX(), oldHex.getY(), newHex.getX(), newHex.getY())) {
             pawn.setCenterX(newHex.getCenterX());
             pawn.setCenterY(newHex.getCenterY());
             oldHex.setAsEmpty();
@@ -308,8 +308,8 @@ public class Board {
    * @param toY   Y coordinate of field when pawn ends move
    * @return
    */
-  private boolean isMoveValid (int fromX, int fromY, int toX, int toY) {
-    return player.isMoveValid(fromX,fromY,toX,toY);
+  private boolean isMovePermitted (int fromX, int fromY, int toX, int toY) {
+    return player.isMovePermitted(fromX,fromY,toX,toY);
   }
 
   public void setMyTurn(boolean myTurn) {

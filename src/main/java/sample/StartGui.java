@@ -1,17 +1,14 @@
 package sample;
 
+import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
-import java.io.IOException;
-
-import static java.lang.Thread.sleep;
 
 
 public class StartGui {
@@ -36,8 +33,8 @@ public class StartGui {
   VBox startPane;
 
 
-  int playersInt;
-  int robotsInt;
+  private int playersInt;
+  private int robotsInt;
 
 
   @FXML
@@ -136,7 +133,22 @@ public class StartGui {
   }
 
   @FXML
-  /*void createGame(ActionEvent event) {
+  void createGame(ActionEvent event) {
+    try {
+      if (playersInt != 0 && robotsInt != -1) {
+        Main.getCounter().createGame(playersInt, robotsInt, startPane);
+        VBox pane = FXMLLoader.load(getClass().getResource("/waitingWindow.fxml"));
+        startPane.getChildren().setAll(pane);
+        //Main.getCounter().startGame();
+        //Main.getCounter().yourTurn();
+      }
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  /* @FXML
+  void createGame(ActionEvent event) {
       try {
         if(playersInt!=0 && robotsInt != -1) {
           Main.getCounter().createGame(playersInt, robotsInt, startPane);
@@ -152,17 +164,4 @@ public class StartGui {
       //counter.addPlayer(2);
   }*/
 
-  void createGame(ActionEvent event) {
-    try {
-      if (playersInt != 0 && robotsInt != -1) {
-        Main.getCounter().createGame(playersInt, robotsInt, startPane);
-        VBox pane = FXMLLoader.load(getClass().getResource("/waitingWindow.fxml"));
-        startPane.getChildren().setAll(pane);
-        Main.getCounter().startGame();
-        //Main.getCounter().yourTurn();
-      }
-    } catch (IOException e) {
-      System.out.println(e.getMessage());
-    }
-  }
 }
