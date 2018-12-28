@@ -136,9 +136,16 @@ public class StartGui {
   void createGame(ActionEvent event) {
     try {
       if (playersInt != 0 && robotsInt != -1) {
+
         Main.getCounter().createGame(playersInt, robotsInt, startPane);
+        Main.getCounter().play();
+        //TODO
+        System.out.println("play is running");
+
+
         VBox pane = FXMLLoader.load(getClass().getResource("/waitingWindow.fxml"));
         startPane.getChildren().setAll(pane);
+
         //Main.getCounter().startGame();
         //Main.getCounter().yourTurn();
       }
