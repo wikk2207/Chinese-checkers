@@ -54,11 +54,6 @@ public class RealPlayer implements Player {
       idd = (id + 6 - a) ;
     }
 
-    if(id==playerId){
-      idd=id;
-      id=1;
-    }
-
     ArrayList<Pawn> pawnsList = new ArrayList<>();
     int x;
     int y;

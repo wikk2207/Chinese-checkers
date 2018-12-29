@@ -319,11 +319,7 @@ public class Board {
    * @return
    */
   private boolean isMovePermitted (int fromX, int fromY, int toX, int toY) {
-    //tODO
-    boolean result = player.isMovePermitted(fromX,fromY,toX,toY);
-    if (result) System.out.println("Otrzymana wartość correct move: true");
-    else System.out.println("Otrzymana wartość correct move: false");
-    return result;
+    return player.isMovePermitted(fromX,fromY,toX,toY);
   }
 
   public void setMyTurn(boolean myTurn) {

@@ -15,6 +15,7 @@ public class Counter {
   private int players;
   private boolean myTurn;
   private boolean boardCreated;
+  private int playerId;
 
 
   Counter() {
@@ -28,27 +29,91 @@ public class Counter {
 
     switch (players) {
       case 2:
-        //todo
-        System.out.println("case 2");
-        player.addPlayer(4);
-        //todo
-        System.out.println("player 4 added");
+        if (playerId == 1) player.addPlayer(4);
+        else player.addPlayer(1);
         break;
       case 3:
-        player.addPlayer(5);
-        player.addPlayer(3);
+        if (playerId == 1) {
+          player.addPlayer(5);
+          player.addPlayer(3);
+        } else if (playerId == 3) {
+          player.addPlayer(5);
+          player.addPlayer(1);
+        } else {
+          player.addPlayer(3);
+          player.addPlayer(1);
+        }
+
         break;
       case 4:
-        player.addPlayer(2);
-        player.addPlayer(5);
-        player.addPlayer(4);
+        switch (playerId){
+          case 1:
+            player.addPlayer(2);
+            player.addPlayer(5);
+            player.addPlayer(4);
+            break;
+          case 2:
+            player.addPlayer(1);
+            player.addPlayer(5);
+            player.addPlayer(4);
+            break;
+          case 4:
+            player.addPlayer(2);
+            player.addPlayer(5);
+            player.addPlayer(1);
+            break;
+          case 5:
+            player.addPlayer(2);
+            player.addPlayer(1);
+            player.addPlayer(4);
+            break;
+        }
         break;
       case 6:
-        player.addPlayer(2);
-        player.addPlayer(5);
-        player.addPlayer(3);
-        player.addPlayer(6);
-        player.addPlayer(4);
+        switch (playerId) {
+          case 1:
+            player.addPlayer(2);
+            player.addPlayer(5);
+            player.addPlayer(3);
+            player.addPlayer(6);
+            player.addPlayer(4);
+            break;
+          case 2:
+            player.addPlayer(1);
+            player.addPlayer(5);
+            player.addPlayer(3);
+            player.addPlayer(6);
+            player.addPlayer(4);
+            break;
+          case 3:
+            player.addPlayer(2);
+            player.addPlayer(5);
+            player.addPlayer(1);
+            player.addPlayer(6);
+            player.addPlayer(4);
+            break;
+          case 4:
+            player.addPlayer(2);
+            player.addPlayer(5);
+            player.addPlayer(3);
+            player.addPlayer(6);
+            player.addPlayer(1);
+            break;
+          case 5:
+            player.addPlayer(2);
+            player.addPlayer(1);
+            player.addPlayer(3);
+            player.addPlayer(6);
+            player.addPlayer(4);
+            break;
+          case 6:
+            player.addPlayer(2);
+            player.addPlayer(5);
+            player.addPlayer(3);
+            player.addPlayer(1);
+            player.addPlayer(4);
+            break;
+        }
         break;
       default:
         break;
@@ -107,11 +172,7 @@ public class Counter {
   public boolean isMovePermitted(int fromX, int fromY, int toX, int toY) {
     //TODO ta metoda powinna zmieniać parametr correctMove
 
-
-      client.move(fromX, fromY, toX, toY);
-
-
-    return correctMove;
+    return client.move(fromX, fromY, toX, toY);
   }
   //Dodana przez matika ;-)
   public void runServerListener() {
@@ -124,7 +185,7 @@ public class Counter {
   //METHODS USED BY CLIENT
 
   public void setId(int id) {
-
+    playerId=id;
     player.setId(id);
   }
 
@@ -186,9 +247,7 @@ public class Counter {
   }
 
   public void correctMove() {
-    //todo
     correctMove = true;
-    System.out.println("move changed to correct");
   }
 
 }
