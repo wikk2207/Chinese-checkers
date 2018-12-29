@@ -148,7 +148,7 @@ public class Game {
   private void doneMove(int endX, int endY) {
     for (int i = 0; i < players.length; i++) {
       if (i != currentPlayer) {
-        int[] cordinates = CordinateTranslator.serverToPlayer(IDs[currentPlayer], begX, begY, endX, endY);
+        int[] cordinates = CordinateTranslator.serverToPlayer(IDs[i], begX, begY, endX, endY);
         players[i].otherPlayerMoved(IDs[currentPlayer], cordinates[0],
             cordinates[1], cordinates[2], cordinates[3]);
       }
