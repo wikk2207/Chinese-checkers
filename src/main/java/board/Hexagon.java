@@ -12,7 +12,7 @@ public class Hexagon extends Polygon {
   private Pawn pawn;
   private double[] points;
 
-  Hexagon(int x, int y) {
+  Hexagon(int x, int y, int xx,  int yy) {
 
     super (x+10, y+32, x+25, y+41, x+40, y+32, x+40, y+14, x+25, y+5, x+10, y+14);
 
@@ -28,8 +28,9 @@ public class Hexagon extends Polygon {
                         10+x,14+y};*/
 
     this.points=points;
-    this.x =x;
-    this.y =y;
+    //TODO zmienione x na xx i y na yy
+    this.x =xx;
+    this.y =yy;
     isField=false;
     this.pawn=null;
   }

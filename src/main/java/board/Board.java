@@ -80,6 +80,9 @@ public class Board {
             if (chosenPawn != null && oldHex != null) {
               newHex = findField(e.getX(),e.getY());
               if (newHex.getPawn() == null) {
+                //TODO
+                System.out.println(oldHex.getX() +" "+ oldHex.getY()+" "+
+                  newHex.getX()+" "+ newHex.getY());
                 boolean move = isMovePermitted(oldHex.getX(), oldHex.getY(),
                   newHex.getX(), newHex.getY());
                 if (move) {
@@ -192,7 +195,9 @@ public class Board {
     for (int y =0; y<size; y++) {
       newRow = new ArrayList<Hexagon>();
       for (int x=0; x<size; x++) {
-        newHexagon =new Hexagon(x*40 + y*20,y*32);
+        //TODO zmienione tworzenie new hexagon
+        newHexagon =new Hexagon(x*40 + y*20,y*32, x, y);
+        //newHexagon =new Hexagon(x*40 + y*20,y*32);
         // newHexagon =new Hexagon(x*30 + y*15,y*25);
         newHexagon.setFill(Color.WHITESMOKE);
         pane.getChildren().add(newHexagon);
@@ -309,7 +314,11 @@ public class Board {
    * @return
    */
   private boolean isMovePermitted (int fromX, int fromY, int toX, int toY) {
-    return player.isMovePermitted(fromX,fromY,toX,toY);
+    //tODO
+    boolean result = player.isMovePermitted(fromX,fromY,toX,toY);
+    if (result) System.out.println("Otrzymana wartość correct move: true");
+    else System.out.println("Otrzymana wartość correct move: false");
+    return result;
   }
 
   public void setMyTurn(boolean myTurn) {

@@ -29,7 +29,9 @@ public class RealPlayer implements Player {
   public void createBoard() {
     try {
       board = new Board(size, playerId, this);
+
       rows = board.getRows();
+
     } catch (BoardException x) {
       System.out.println(x.getMessage());
       System.exit(-1);
@@ -150,6 +152,9 @@ public class RealPlayer implements Player {
       }
       default:
     }
+    //todo
+    if (board == null) System.out.println("board is null");
+    if (pawnsList == null) System.out.println("pawnlist is null");
     board.addPawns(pawnsList);
   }
 
@@ -175,7 +180,10 @@ public class RealPlayer implements Player {
     board.uploadMove(playerId, fromX, fromY, toX, toY);
   }
   public boolean isMovePermitted (int fromX, int fromY, int toX, int toY) {
-    return counter.isMovePermitted(fromX,fromY,toX,toY);
+    //tODO
+    boolean result = counter.isMovePermitted(fromX,fromY,toX,toY);
+    if (result) System.out.println("true");
+    return result;
   }
 
   public int getId() {
