@@ -74,7 +74,7 @@ public class Board {
             if (oldHex.getPawn() != null && oldHex.getPawn().getPlayerId() == playerId) {
               chosenPawn = oldHex.getPawn();
               if (playerId == 4) {
-                chosenPawn.setFill(chosenPawn.getColor().brighter());
+                chosenPawn.setFill(Color.DARKGREY);
               } else {
                 chosenPawn.setFill(chosenPawn.getColor().darker());
               }
@@ -201,7 +201,7 @@ public class Board {
       newRow = new ArrayList<Hexagon>();
       for (int x=0; x<size; x++) {
         //TODO zmienione tworzenie new hexagon
-        newHexagon =new Hexagon(x*40 + y*20,y*32, x, y);
+        newHexagon =new Hexagon(x*40 + y*20,y*32, x, size-1-y);
         //newHexagon =new Hexagon(x*40 + y*20,y*32);
         // newHexagon =new Hexagon(x*30 + y*15,y*25);
         newHexagon.setFill(Color.WHITESMOKE);
@@ -300,11 +300,11 @@ public class Board {
   }
 
   public void uploadMove(int playerId, int fromX, int fromY, int toX, int toY) {
-    Hexagon fromField = rows.get(fromY).get(fromX);
-    Hexagon toField = rows.get(toY).get(toX);
+    Hexagon fromField = rows.get(size-1-fromY).get(fromX);
+    Hexagon toField = rows.get(size-1-toY).get(toX);
     fromField.getPawn().setCenterY(toField.getCenterY());
     fromField.getPawn().setCenterX(toField.getCenterX());
-    fromField.getPawn().move(toX, toY);
+    fromField.getPawn().move(toX, size-1-toY);
     toField.setPawn(fromField.getPawn());
     fromField.setAsEmpty();
   }

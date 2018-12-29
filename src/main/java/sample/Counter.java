@@ -28,7 +28,11 @@ public class Counter {
 
     switch (players) {
       case 2:
+        //todo
+        System.out.println("case 2");
         player.addPlayer(4);
+        //todo
+        System.out.println("player 4 added");
         break;
       case 3:
         player.addPlayer(5);
@@ -134,7 +138,8 @@ public class Counter {
    * @param players Number of players.
    */
   public void setNumberOfPlayers(int players) {
-
+    //todo
+    System.out.println("set players " +players);
     this.players=players;
   }
 
@@ -166,6 +171,8 @@ public class Counter {
         createBoard();
         boardCreated=true;
         addPlayers();
+        //todo
+        System.out.println("players added");
         player.setMyTurn(myTurn);
         Scene scene = player.getScene();
         pane.getChildren().setAll(scene.getRoot());
