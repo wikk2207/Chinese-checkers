@@ -106,7 +106,7 @@ public class Board {
         if (myTurn) {
           if (!fieldClicked) {
             oldHex = findField(e.getX(),e.getY());
-            if (oldHex.getPawn() != null && oldHex.getPawn().getPlayerId() == playerId) {
+            if (oldHex != null && oldHex.getPawn() != null && oldHex.getPawn().getPlayerId() == playerId) {
               chosenPawn = oldHex.getPawn();
               if (playerId == 4) {
                 chosenPawn.setFill(Color.DARKGREY);
@@ -119,7 +119,7 @@ public class Board {
           } else {
             if (chosenPawn != null && oldHex != null) {
               newHex = findField(e.getX(),e.getY());
-              if (newHex.getPawn() == null) {
+              if (newHex != null && newHex.getPawn() == null) {
                 boolean move = isMovePermitted(oldHex.getX(), oldHex.getY(),
                   newHex.getX(), newHex.getY());
                 if (move) {
