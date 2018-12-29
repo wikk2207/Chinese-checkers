@@ -164,6 +164,7 @@ public class Counter {
     Platform.runLater(new Runnable() {
       public void run() {
         createBoard();
+        boardCreated=true;
         addPlayers();
         player.setMyTurn(myTurn);
         Scene scene = player.getScene();

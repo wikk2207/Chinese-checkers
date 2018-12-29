@@ -73,7 +73,12 @@ public class Board {
             oldHex = findField(e.getX(),e.getY());
             if (oldHex.getPawn() != null && oldHex.getPawn().getPlayerId() == playerId) {
               chosenPawn = oldHex.getPawn();
-              chosenPawn.setFill(chosenPawn.getColor().darker());
+              if (playerId == 4) {
+                chosenPawn.setFill(chosenPawn.getColor().brighter());
+              } else {
+                chosenPawn.setFill(chosenPawn.getColor().darker());
+              }
+
               fieldClicked = true;
             }
           } else {
