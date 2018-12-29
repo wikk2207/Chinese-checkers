@@ -84,6 +84,7 @@ public class Client extends Thread{
         response = input.readLine();
         //Do zweryfikowania przez Wiktorię
         if (response.startsWith(OPPONENT_MOVED)) {
+          System.out.println(response);
           String[] arguments = response.split(" ");
           try {
             counter.uploadMove(
@@ -96,7 +97,6 @@ public class Client extends Thread{
           } catch (NumberFormatException e) {
             System.err.println("Zły format SET_OPPONENTS");
           }
-          System.out.println(response);
         } else if (response.equals(YOUR_TURN)) {
           counter.yourTurn();
           System.out.println(response);

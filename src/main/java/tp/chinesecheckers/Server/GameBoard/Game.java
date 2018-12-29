@@ -135,7 +135,7 @@ public class Game {
    */
   public void runGame() {
     /*
-    while(iterator < realPlayerNum + bootNum) {
+    while(iterator < allPlayerNum) {
       addBoot();
     }
     */
@@ -148,6 +148,7 @@ public class Game {
   private void doneMove(int endX, int endY) {
     for (int i = 0; i < players.length; i++) {
       if (i != currentPlayer) {
+        System.out.println(i + " " + begX + " " + begY + " " + endX + " " + endY);
         int[] cordinates = CordinateTranslator.serverToPlayer(IDs[i], begX, begY, endX, endY);
         players[i].otherPlayerMoved(IDs[currentPlayer], cordinates[0],
             cordinates[1], cordinates[2], cordinates[3]);
@@ -187,8 +188,8 @@ public class Game {
       return;
     } else if (result == 1) {
       if (!jump) {
-        this.begX = beginX;
-        this.begY = beginY;
+        this.begX = cordinates[0];
+        this.begY = cordinates[1];
       } else {
         if (cordinates[0] != previousX || cordinates[1] != previousY) { //TODO dopiero dodane, może wywoływać błędy
           players[currentPlayer].wrongMove();
@@ -202,11 +203,11 @@ public class Game {
       return;
     } else {
       if (!jump) {
-        this.begX = beginX;
-        this.begY = beginY;
+        this.begX = cordinates[0];
+        this.begY = cordinates[1];
       }
       players[currentPlayer].correctMove();
-      doneMove(endX, endY);
+      doneMove(cordinates[2], cordinates[3]);
       nextPlayer();
       return;
     }
