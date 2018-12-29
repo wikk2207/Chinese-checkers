@@ -68,6 +68,16 @@ public class RealPlayer extends Thread implements Player {
   }
 
   @Override
+  public void wrongMove() {
+    output.println(WRONG_MOVE);
+  }
+
+  @Override
+  public void correctMove() {
+    output.println(CORRECT_MOVE);
+  }
+
+  @Override
   public void otherPlayerMoved(int opponent, int begX, int begY, int endX, int endY) {
     output.println(OPPONENT_MOVED + " " + opponent + " " + begX + " " + begY + " " + endX
         + " " + endY);
@@ -110,11 +120,7 @@ public class RealPlayer extends Thread implements Player {
               System.err.println("Zły format liczby");
             }
           }
-          if (!game.move(id, cordinates[0], cordinates[1], cordinates[2], cordinates[3])) {
-            output.println(WRONG_MOVE);
-          } else {
-            output.println(CORRECT_MOVE);
-          }
+          game.move(id, cordinates[0], cordinates[1], cordinates[2], cordinates[3]);
         } else if (command.equals(END_MOVE)) {
           game.endMove(id);
         }

@@ -81,7 +81,6 @@ public class Client extends Thread{
     String response;
     try {
       while (run) {
-        System.out.println("READY TO READ");
         response = input.readLine();
         //Do zweryfikowania przez Wiktorię
         if (response.startsWith(OPPONENT_MOVED)) {
@@ -97,6 +96,7 @@ public class Client extends Thread{
           } catch (NumberFormatException e) {
             System.err.println("Zły format SET_OPPONENTS");
           }
+          System.out.println(response);
         } else if (response.equals(YOUR_TURN)) {
           counter.yourTurn();
           System.out.println(response);
@@ -137,9 +137,26 @@ public class Client extends Thread{
    * @param endX Pierwsza wspolrzedna konca ruchu
    * @param endY Druga wspolrzedna konca ruchu
    */
-  public void move(int begX, int begY, int endX, int endY) {
+  public boolean move(int begX, int begY, int endX, int endY) {
     output.println(MOVED + " " + begX + " " + begY + " " + endX + " " + endY);
     System.out.println(MOVED + " " + begX + " " + begY + " " + endX + " " + endY);
+    String response;
+    try {
+      while (true) {
+        response = input.readLine();
+        if (response.equals(WRONG_MOVE)) {
+          System.out.println(response);
+          return false;
+        } else if (response.equals(CORRECT_MOVE)) {
+          System.out.println(response);
+          return true;
+        }
+      }
+    } catch (IOException e) {
+      System.err.println("Lost conection with server");
+      System.exit(1);
+    }
+    return false;
   }
 
   /**
