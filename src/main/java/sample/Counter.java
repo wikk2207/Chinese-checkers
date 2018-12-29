@@ -16,6 +16,7 @@ public class Counter {
   private boolean myTurn;
   private boolean boardCreated;
   private int playerId;
+  private boolean czyPadlaOdpowiedz;
 
 
   Counter() {
@@ -23,6 +24,7 @@ public class Counter {
     client = new Client(this);
     myTurn = false;
     boardCreated = false;
+    czyPadlaOdpowiedz = false;
   }
 
   public void addPlayers() {
@@ -120,7 +122,6 @@ public class Counter {
     }
   }
 
-
   //METHODS USED BY MAIN
 
   public void setBoardSize(int size) {
@@ -170,10 +171,14 @@ public class Counter {
    * @return True if move is correct and if not - false.
    */
   public boolean isMovePermitted(int fromX, int fromY, int toX, int toY) {
-    //TODO ta metoda powinna zmieniać parametr correctMove
-
-    return client.move(fromX, fromY, toX, toY);
+    client.move(fromX, fromY, toX, toY);
+    while (!czyPadlaOdpowiedz){
+      //just wait for response
+    }
+    czyPadlaOdpowiedz = false;
+    return correctMove;
   }
+
   //Dodana przez matika ;-)
   public void runServerListener() {
 
@@ -199,8 +204,6 @@ public class Counter {
    * @param players Number of players.
    */
   public void setNumberOfPlayers(int players) {
-    //todo
-    System.out.println("set players " +players);
     this.players=players;
   }
 
@@ -232,8 +235,6 @@ public class Counter {
         createBoard();
         boardCreated=true;
         addPlayers();
-        //todo
-        System.out.println("players added");
         player.setMyTurn(myTurn);
         Scene scene = player.getScene();
         pane.getChildren().setAll(scene.getRoot());
@@ -244,10 +245,12 @@ public class Counter {
 
   public void wrongMove() {
     correctMove = false;
+    czyPadlaOdpowiedz = true;
   }
 
   public void correctMove() {
     correctMove = true;
+    czyPadlaOdpowiedz = true;
   }
 
 }

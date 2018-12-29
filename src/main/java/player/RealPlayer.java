@@ -66,7 +66,7 @@ public class RealPlayer implements Player {
       case 1: {
         for (i = 0, y = size - pawns; i < pawns; i++) {
           for (j = 0, x = pawns; j < pawns - i; j++) {
-            newPawn = new Pawn(y + i, x + j, id);
+            newPawn = new Pawn(y + i, x + j, y + i, x + j, id);
             xx = rows.get(y + i).get(x + j).getCenterX();
             yy = rows.get(y + i).get(x + j).getCenterY();
             newPawn.setCenterX(xx);
@@ -81,7 +81,7 @@ public class RealPlayer implements Player {
       case 2: {
         for (i = 0, y = size - pawns - 1; i < pawns;i++) {
           for (x = pawns - 1, j = 0; j < pawns - i; j++) {
-            newPawn = new Pawn(x - j, y - i, id);
+            newPawn = new Pawn(x - j, y - i,x - j, y - i, id);
             xx = rows.get(y - i).get(x - j).getCenterX();
             yy = rows.get(y - i).get(x - j).getCenterY();
             newPawn.setCenterY(yy);
@@ -95,7 +95,7 @@ public class RealPlayer implements Player {
       case 3:
         for (y = pawns, i = 0; i < pawns;i++) {
           for (x = pawns, j = 0; j < pawns - i; j++) {
-            newPawn = new Pawn(x + j, y + i, id);
+            newPawn = new Pawn(x + j, y + i, x + j, y + i, id);
             xx = rows.get(y + i).get(x + j).getCenterX();
             yy = rows.get(y + i).get(x + j).getCenterY();
             newPawn.setCenterX(xx);
@@ -109,7 +109,7 @@ public class RealPlayer implements Player {
       case 4: {
         for (y = pawns - 1, i = 0; i < pawns; i++) {
           for (x = size - pawns - 1, j = 0; j < pawns - i; j++) {
-            newPawn = new Pawn(y - i, x - j, id);
+            newPawn = new Pawn(y - i, x - j, y - i, x - j, id);
             xx = rows.get(y - i).get(x - j).getCenterX();
             yy = rows.get(y - i).get(x - j).getCenterY();
             newPawn.setCenterX(xx);
@@ -124,7 +124,7 @@ public class RealPlayer implements Player {
       case 5: {
         for (y = pawns, i = 0; i < pawns; i++) {
           for (x = size - pawns, j = 0; j < pawns - i; j++) {
-            newPawn = new Pawn(y + i, x + j, id);
+            newPawn = new Pawn(y + i, x + j, y + i, x + j, id);
             xx = rows.get(y + i).get(x + j).getCenterX();
             yy = rows.get(y + i).get(x + j).getCenterY();
             newPawn.setCenterX(xx);
@@ -139,7 +139,7 @@ public class RealPlayer implements Player {
 
         for (y = size - pawns - 1, i = 0; i < pawns; i++) {
           for (x = size - pawns - 1, j = 0; j < pawns - i; j++) {
-            newPawn = new Pawn(y - i, x - j, id);
+            newPawn = new Pawn(y - i, x - j, y - i, x - j, id);
             xx = rows.get(y - i).get(x - j).getCenterX();
             yy = rows.get(y - i).get(x - j).getCenterY();
             newPawn.setCenterX(xx);
@@ -152,9 +152,7 @@ public class RealPlayer implements Player {
       }
       default:
     }
-    //todo
-    if (board == null) System.out.println("board is null");
-    if (pawnsList == null) System.out.println("pawnlist is null");
+
     board.addPawns(pawnsList);
   }
 
@@ -180,9 +178,7 @@ public class RealPlayer implements Player {
     board.uploadMove(playerId, fromX, fromY, toX, toY);
   }
   public boolean isMovePermitted (int fromX, int fromY, int toX, int toY) {
-    //tODO
     boolean result = counter.isMovePermitted(fromX,fromY,toX,toY);
-    if (result) System.out.println("true");
     return result;
   }
 

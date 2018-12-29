@@ -28,7 +28,6 @@ public class Hexagon extends Polygon {
                         10+x,14+y};*/
 
     this.points=points;
-    //TODO zmienione x na xx i y na yy
     this.x =xx;
     this.y =yy;
     isField=false;

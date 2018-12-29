@@ -11,8 +11,8 @@ public class Pawn extends Circle {
   private static Color[] color = {Color.RED, Color.ORANGE,Color.GREEN, Color.BLACK, Color.PURPLE, Color.BLUE};
   private int playerId;
 
-  public Pawn(double x, double y, int playerID) {
-    super(x,y,7,color[playerID-1]);
+  public Pawn(double centerX, double centerY, int x, int y, int playerID) {
+    super(centerX,centerY,7,color[playerID-1]);
     this.x=x;
     this.y=y;
     this.playerId=playerID;
