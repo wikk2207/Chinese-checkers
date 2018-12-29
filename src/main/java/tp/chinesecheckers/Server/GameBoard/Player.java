@@ -10,4 +10,8 @@ public interface Player {
   void turnEnd();
 
   void setOpponetsNum(int players);
+
+  void wrongMove();
+
+  void correctMove();
 }

@@ -1,5 +1,4 @@
 package tp.chinesecheckers.Server.GameBoard;
-//TODO Napsiać klasę gra która będzie przechowywać graczy i rozpoczynać grę
 
 import java.net.Socket;
 
@@ -176,35 +175,40 @@ public class Game {
    * @param endY druga wspołrzędna punktu końca
    * @return
    */
-  public boolean move(int playerId, int beginX, int beginY, int endX, int endY) {
+  public void move(int playerId, int beginX, int beginY, int endX, int endY) {
     if (playerId != IDs[currentPlayer]) {
-      return false;
+      players[currentPlayer].wrongMove();
+      return;
     }
     int[] cordinates = CordinateTranslator.playerToServer(playerId, beginX, beginY, endX, endY);
     int result = master.movePawn(jump, cordinates[0], cordinates[1], cordinates[2], cordinates[3]);
     if (result == 2) {
-      return false;
+      players[currentPlayer].wrongMove();
+      return;
     } else if (result == 1) {
       if (!jump) {
         this.begX = beginX;
         this.begY = beginY;
       } else {
         if (cordinates[0] != previousX || cordinates[1] != previousY) { //TODO dopiero dodane, może wywoływać błędy
-          return false;
+          players[currentPlayer].wrongMove();
+          return;
         }
       }
       previousX = cordinates[2];
       previousY = cordinates[3];
       jump = true;
-      return true;
+      players[currentPlayer].correctMove();
+      return;
     } else {
       if (!jump) {
         this.begX = beginX;
         this.begY = beginY;
       }
+      players[currentPlayer].correctMove();
       doneMove(endX, endY);
       nextPlayer();
-      return true;
+      return;
     }
   }
 
