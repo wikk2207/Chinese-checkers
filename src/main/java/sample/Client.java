@@ -56,14 +56,23 @@ public class Client extends Thread{
         if (response.startsWith(SET_ID)) {
           try {
             counter.setId(Integer.parseInt(response.substring(SET_ID.length() + 1)));
+            System.out.println(response);
           } catch (NumberFormatException e) {
             System.err.println("Zły format ID");
           }
         } else if (response.equals(SET_NUMBER_OF_PLAYERS)) {
+          System.out.println(response);
           counter.setFirst(true);
           first_set = true;
-        } else if (response.equals(JOINED_TO_GAME)) {
-          counter.setFirst(false);
+        } else if (response.startsWith(SET_OPPONENTS)) {
+          System.out.println(response);
+          try {
+            counter.setNumberOfPlayers(
+                Integer.parseInt(response.substring(SET_OPPONENTS.length() + 1))
+            );
+          } catch (NumberFormatException e) {
+            System.err.println("Zły format SET_OPPONENTS");
+          }
           first_set = true;
         }
       }
@@ -83,16 +92,7 @@ public class Client extends Thread{
         System.out.println("READY TO READ");
         response = input.readLine();
         //Do zweryfikowania przez Wiktorię
-        if (response.startsWith(SET_OPPONENTS)) {
-          try {
-            counter.setNumberOfPlayers(
-                Integer.parseInt(response.substring(SET_OPPONENTS.length() + 1))
-            );
-          } catch (NumberFormatException e) {
-            System.err.println("Zły format SET_OPPONENTS");
-          }
-        }
-        else if (response.startsWith(OPPONENT_MOVED)) {
+        if (response.startsWith(OPPONENT_MOVED)) {
           String[] arguments = response.split(" ");
           try {
             counter.uploadMove(
