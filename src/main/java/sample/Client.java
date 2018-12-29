@@ -42,8 +42,17 @@ public class Client extends Thread{
       socket = new Socket(HOST, PORT);
       input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       output = new PrintWriter(socket.getOutputStream(), true);
+      //TODO
+      System.out.println("cocket, input, output");
+
       while(!first_set) {
+        //TODO
+        System.out.println("in while...");
+
         response = input.readLine();
+        //TODO
+        System.out.println("response");
+
         if (response.startsWith(SET_ID)) {
           try {
             counter.setId(Integer.parseInt(response.substring(SET_ID.length() + 1)));

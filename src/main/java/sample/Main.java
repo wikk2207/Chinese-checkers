@@ -47,9 +47,15 @@ public class Main extends Application {
   }
 
   public static void main(String[] args) {
+    //TODO
+    System.out.println("main");
     counter = new Counter();
+    System.out.println("new counter");
+
     counter.setBoardSize(17);
     counter.runServerListener();
+    System.out.println("server listener on");
+
     launch(args);
   }
 

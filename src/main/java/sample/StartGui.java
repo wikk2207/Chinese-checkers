@@ -138,7 +138,6 @@ public class StartGui {
       if (playersInt != 0 && robotsInt != -1) {
 
         Main.getCounter().createGame(playersInt, robotsInt, startPane);
-        Main.getCounter().play();
         //TODO
         System.out.println("play is running");
 

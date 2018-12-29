@@ -15,7 +15,12 @@ public class Counter {
 
   Counter() {
     player = new RealPlayer(this);
+    //TODO
+    System.out.println("player created");
+
     client = new Client(this);
+    System.out.println("client created");
+
   }
 
 
@@ -69,6 +74,8 @@ public class Counter {
     client.move(fromX, fromY, toX, toY);
     return correctMove;
   }
+
+
 
   //METHODS USED BY CLIENT
 
