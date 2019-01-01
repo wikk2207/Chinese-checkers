@@ -28,7 +28,7 @@ public class BoardBuilderDirector {
     switch (players) {
       case 2:
         boardBulider.addPlayerOne();
-        boardBulider.addPlayerTwo();
+        boardBulider.addPlayerFour();
         break;
 
       case 3:

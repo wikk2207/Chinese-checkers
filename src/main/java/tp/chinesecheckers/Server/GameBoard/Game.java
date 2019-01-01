@@ -148,7 +148,7 @@ public class Game {
   private void doneMove(int endX, int endY) {
     for (int i = 0; i < players.length; i++) {
       if (i != currentPlayer) {
-        System.out.println(i + " " + begX + " " + begY + " " + endX + " " + endY);
+        System.out.println("DONE MOVE " + i + " " + begX + " " + begY + " " + endX + " " + endY);
         int[] cordinates = CordinateTranslator.serverToPlayer(IDs[i], begX, begY, endX, endY);
         players[i].otherPlayerMoved(IDs[currentPlayer], cordinates[0],
             cordinates[1], cordinates[2], cordinates[3]);
@@ -163,8 +163,8 @@ public class Game {
       currentPlayer = 0;
     }
     System.out.println("Current player: " + currentPlayer);
-    players[currentPlayer].yourTurn();
     jump = false;
+    players[currentPlayer].yourTurn();
   }
 
   /**
@@ -185,6 +185,8 @@ public class Game {
     int result = master.movePawn(jump, cordinates[0], cordinates[1], cordinates[2], cordinates[3]);
     if (result == 2) {
       players[currentPlayer].wrongMove();
+      System.out.println(cordinates[0] + " " + cordinates[1] + " " + cordinates[2] + " " + cordinates[3]);
+      System.out.println("Zły ruch " + jump);
       return;
     } else if (result == 1) {
       if (!jump) {
@@ -198,15 +200,13 @@ public class Game {
       }
       previousX = cordinates[2];
       previousY = cordinates[3];
-      jump = true;
       players[currentPlayer].correctMove();
+      jump = true;
       System.out.println("IS JUMP: " + jump);
       return;
     } else {
-      if (!jump) {
-        this.begX = cordinates[0];
-        this.begY = cordinates[1];
-      }
+      this.begX = cordinates[0];
+      this.begY = cordinates[1];
       players[currentPlayer].correctMove();
       doneMove(cordinates[2], cordinates[3]);
       nextPlayer();
