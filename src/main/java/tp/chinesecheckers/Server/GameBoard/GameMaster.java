@@ -43,7 +43,7 @@ public class GameMaster {
    * Metoda zwraca informację o prawidłowości jednocześnie dokonując go na planszy serverowej.
    * Zwraca 2 gdy ruch jest niedozwolony.
    * Zwraca 1 gdy ruch jest dozwolony i gracz może kontynuować ruch.
-   * Zwraca -1 gdy ruch jest dozwolony i gracz ma zakończyć ruch.
+   * Zwraca 0 gdy ruch jest dozwolony i gracz ma zakończyć ruch.
    * @param jump Informaca czy poprzedni ruch tego gracza był skokiem
    * @param begX
    * @param begY

@@ -200,6 +200,7 @@ public class Game {
       previousY = cordinates[3];
       jump = true;
       players[currentPlayer].correctMove();
+      System.out.println("IS JUMP: " + jump);
       return;
     } else {
       if (!jump) {
@@ -209,6 +210,7 @@ public class Game {
       players[currentPlayer].correctMove();
       doneMove(cordinates[2], cordinates[3]);
       nextPlayer();
+      System.out.println("SINGLE MOVE  +  IS JUMP: " + jump);
       return;
     }
   }

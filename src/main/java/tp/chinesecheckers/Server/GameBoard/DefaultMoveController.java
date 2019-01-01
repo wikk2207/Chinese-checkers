@@ -25,7 +25,8 @@ public class DefaultMoveController implements MoveController {
   public boolean isJump(int begX, int begY, int endX, int endY) {
     int x = endX - begX;
     int y = endY - begY;
-    return ((Math.abs(x) == 2 && Math.abs(y) == 0) || (Math.abs(x) == 0 && Math.abs(y) == 2));
+    return ((Math.abs(x) == 2 && Math.abs(y) == 0) || (Math.abs(x) == 0 && Math.abs(y) == 2) ||
+        (x == 2 && y == 2) || (x == -2 && y == -2));
 
   }
 
