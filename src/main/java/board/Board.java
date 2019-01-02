@@ -2,14 +2,16 @@ package board;
 
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import player.Player;
 import player.RealPlayer;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class Board {
@@ -28,6 +30,9 @@ public class Board {
   private Hexagon newHex;
   private RealPlayer player;
   private boolean myTurn;
+  private Button endMoveButton;
+  private Label isMyTurn;
+  private HBox hBox;
 
 
 
@@ -56,11 +61,21 @@ public class Board {
     //scene = new Scene(borderPane,1.5*size*30,size*28);
     scene = new Scene(borderPane,1.5*size*40,size*35);
 
+    hBox = new HBox();
+    hBox.setAlignment(Pos.CENTER);
+    hBox.setSpacing(30);
+    endMoveButton= new Button("Skip");
+    addActionToButton();
+    isMyTurn = new Label();
+    hBox.getChildren().addAll(isMyTurn, endMoveButton);
+
     createFields();
     paintBoard();
     createPawns();
     addPawns(pawnsList);
     borderPane.setCenter(pane);
+    borderPane.setTop(hBox);
+
     paintPlayerFields(1);
     paneEvent(pane);
 
@@ -104,9 +119,15 @@ public class Board {
     Platform.runLater(() -> {
       pane.setOnMouseClicked(e -> {
         if (myTurn) {
+          //todo
+          System.out.println("It's my turn");
           if (!fieldClicked) {
+            //todo
+            System.out.println("first click");
             oldHex = findField(e.getX(),e.getY());
             if (oldHex != null && oldHex.getPawn() != null && oldHex.getPawn().getPlayerId() == playerId) {
+              //todo
+              System.out.println("field is founded, field has pawn, player id is correct");
               chosenPawn = oldHex.getPawn();
               if (playerId == 4) {
                 chosenPawn.setFill(Color.DARKGREY);
@@ -117,17 +138,28 @@ public class Board {
               fieldClicked = true;
             }
           } else {
+            //todo
+            System.out.println("Now put pawn");
             if (chosenPawn != null && oldHex != null) {
+              //todo
+              System.out.println("i have pawn chosen and oldhex isnt null");
               newHex = findField(e.getX(),e.getY());
               if (newHex != null && newHex.getPawn() == null) {
+                //todo
+                System.out.println("i found new field and it doesnt have any pawn");
                 boolean move = isMovePermitted(oldHex.getX(), oldHex.getY(),
                   newHex.getX(), newHex.getY());
                 if (move) {
+                  //todo
+                  System.out.println("move is permitted");
                   chosenPawn.setCenterX(newHex.getCenterX());
                   chosenPawn.setCenterY(newHex.getCenterY());
                   newHex.setPawn(chosenPawn);
                   oldHex.setAsEmpty();
                   chosenPawn.setFill(chosenPawn.getColor());
+                } else {
+                  //todo
+                  System.out.println("move isnt permitted");
                 }
               }
               chosenPawn.setFill(chosenPawn.getColor());
@@ -244,6 +276,22 @@ public class Board {
     }
   }
 
+  private void addActionToButton(){
+    endMoveButton.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        if(myTurn) {
+          endMove();
+          if(chosenPawn!=null) {
+            chosenPawn.setFill(chosenPawn.getColor());
+            chosenPawn=null;
+            oldHex=null;
+          }
+        }
+      }
+    });
+  }
+
 
   //METHODS TO COMMUNICATE WITH SERVER
 
@@ -257,10 +305,25 @@ public class Board {
    * @return
    */
   private boolean isMovePermitted (int fromX, int fromY, int toX, int toY) {
-    return player.isMovePermitted(fromX,fromY,toX,toY);
+    //todo
+    System.out.println("sprawdzam czy dozwolony...");
+    boolean result = player.isMovePermitted(fromX,fromY,toX,toY);
+    if(result) System.out.println("true");
+    else System.out.println("false");
+    return result;
   }
 
   public void setMyTurn(boolean myTurn) {
+    Platform.runLater(() -> {
+      if (myTurn) {
+        isMyTurn.setText("Your turn!");
+        endMoveButton.setDisable(false);
+      } else {
+        isMyTurn.setText("Wait...");
+        endMoveButton.setDisable(true);
+      }
+    });
+
     this.myTurn=myTurn;
   }
 
@@ -269,8 +332,12 @@ public class Board {
     Hexagon toField = rows.get(size-1-toY).get(toX);
     fromField.getPawn().setCenterY(toField.getCenterY());
     fromField.getPawn().setCenterX(toField.getCenterX());
-    fromField.getPawn().move(toX, size-1-toY);
+    fromField.getPawn().move(toX, toY);
     toField.setPawn(fromField.getPawn());
     fromField.setAsEmpty();
+  }
+
+  public void endMove() {
+    player.endMove();
   }
 }

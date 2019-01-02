@@ -9,7 +9,7 @@ import sample.Counter;
 
 import java.util.ArrayList;
 
-public class RealPlayer implements Player {
+public class RealPlayer {
   private Board board;
   private int size;
   private int playerId;
@@ -178,11 +178,17 @@ public class RealPlayer implements Player {
     board.uploadMove(playerId, fromX, fromY, toX, toY);
   }
   public boolean isMovePermitted (int fromX, int fromY, int toX, int toY) {
+    //todo
+    System.out.println("checking in player...");
     boolean result = counter.isMovePermitted(fromX,fromY,toX,toY);
     return result;
   }
 
   public int getId() {
     return playerId;
+  }
+
+  public void endMove() {
+    counter.endMove();
   }
 }

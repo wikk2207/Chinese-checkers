@@ -3,11 +3,10 @@ package sample;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
-import player.Player;
 import player.RealPlayer;
 
 public class Counter {
-  private Player player;
+  private RealPlayer player;
   private VBox pane;
   private Client client;
   private boolean correctMove;
@@ -171,10 +170,15 @@ public class Counter {
    * @return True if move is correct and if not - false.
    */
   public boolean isMovePermitted(int fromX, int fromY, int toX, int toY) {
+    //todo
+    System.out.println("checking in counter...");
     client.move(fromX, fromY, toX, toY);
     while (!czyPadlaOdpowiedz){
-      //just wait for response
+      //todo
+      System.out.println("...");
     }
+    //todo
+    System.out.println("response...");
     czyPadlaOdpowiedz = false;
     return correctMove;
   }
@@ -183,6 +187,10 @@ public class Counter {
   public void runServerListener() {
 
     client.start();
+  }
+
+  public void endMove() {
+    client.endMove();
   }
 
 
