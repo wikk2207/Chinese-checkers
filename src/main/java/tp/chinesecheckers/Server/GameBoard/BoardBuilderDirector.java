@@ -38,10 +38,10 @@ public class BoardBuilderDirector {
         break;
 
       case 4:
+        boardBulider.addPlayerOne();
         boardBulider.addPlayerTwo();
-        boardBulider.addPlayerThree();
+        boardBulider.addPlayerFour();
         boardBulider.addPlayerFife();
-        boardBulider.addPlayerSix();
         break;
 
       case 6:
