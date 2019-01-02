@@ -81,6 +81,8 @@ public class TenPawsBoardBuilderTest {
     assertFalse(gameBoard.isFree(10, 5));
     assertFalse(gameBoard.isFree(11, 6));
     assertFalse(gameBoard.isFree(10, 4));
+
+
   }
 
 }

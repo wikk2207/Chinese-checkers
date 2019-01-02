@@ -34,6 +34,13 @@ public class DefaultMoveControllerTest {
     assertTrue(controller.isMovePossible(gameBoard, 5, 11, 7, 11));
     assertTrue(controller.isMovePossible(gameBoard, 14, 11, 12, 11));
 
+    assertTrue(controller.isJump(4, 2, 4, 4));
+    assertTrue(controller.isJump( 4, 2, 6, 4));
+    assertTrue(controller.isJump( 11, 14, 9, 12));
+    assertTrue(controller.isJump( 11, 14, 11, 12));
+    assertTrue(controller.isJump( 5, 11, 7, 11));
+    assertTrue(controller.isJump( 14, 11, 12, 11));
+
     //random place
     assertFalse(controller.isMovePossible(gameBoard, 4, 3, 11, 2));
     assertFalse(controller.isMovePossible(gameBoard, 5, 3, 0, 0));
