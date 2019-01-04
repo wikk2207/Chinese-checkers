@@ -12,7 +12,6 @@ public class BestMove {
   private ArrayList<Path<Move>> possiblePaths;
   //private boolean previousWasJump;
   private boolean firstStep;
-  private Scanner scanner; //todo test
 
 
   BestMove(int[][] gameBoard, int size, int myId) {
@@ -31,7 +30,8 @@ public class BestMove {
     possiblePaths = new ArrayList<>();
     //previousWasJump = false;
     firstStep = true;
-    scanner = new Scanner(System.in); //todo test
+
+    checkPawnsToFindBestMove();
 
   }
 
@@ -63,19 +63,22 @@ public class BestMove {
       }
     }
 //moves
+
     gameBoard[5][3] = 0;
     gameBoard[5][4] = 1;
     gameBoard[4][0] = 0;
     gameBoard[5][6] = 1;
 
 
-
     BestMove bestMove = new BestMove(gameBoard, 17, 1);
 
     ArrayList<Path<Move>> possiblePaths = bestMove.getPossibleMoves();
+    Path bestPath = bestMove.chooseBestPath();
+    System.out.print("Best move: ");
+    System.out.println(bestPath.getFromX() +" "+ bestPath.getFromY() + " " +bestPath.getToX() + " " + bestPath.getToY());
 
     for (int i = 0; i < possiblePaths.size(); i++) {
-      System.out.println(i + ". New way... ");
+      System.out.println(i + ". New way... " + possiblePaths.get(i).getLength() + " " +possiblePaths.get(i).getDistanceToGoal() );
       for (int j = 0; j < possiblePaths.get(i).size(); j++) {
         System.out.println("  " + possiblePaths.get(i).get(j).getFromX()
             + " " + possiblePaths.get(i).get(j).getFromY()
@@ -83,6 +86,8 @@ public class BestMove {
             + " " + possiblePaths.get(i).get(j).getToY());
       }
     }
+
+
   }
 
 
@@ -93,10 +98,6 @@ public class BestMove {
         if (gameBoard[i][j] != myId) {
           continue;
         }
-        //TODO pritnln
-        System.out.println("pawn " + i + " " + j + " pawnNumber " + pawnNumber);
-        //firstStep = true;
-        //previousWasJump = false;
         checkWays(pawnNumber,i, j, true,false);
         pawnNumber++;
       }
@@ -187,30 +188,27 @@ public class BestMove {
     }
 
     for (int i = 0; i < 12; i++) {
-      //todo
-      System.out.println("check move" + i);
       if(moves[i] == null) continue;
 
       if (moves[i].isFirst()) {
-        //TODO
-        System.out.println("first step");
-        possiblePaths.add(new Path(pawnNumber)); //dodaj nową ścieżkę dla tej możliwości
+        possiblePaths.add(new Path(pawnNumber,moves[i].getFromX(), moves[i].getFromY())); //dodaj nową ścieżkę dla tej możliwości
         possiblePaths.get(possiblePaths.size() - 1).add(moves[i]); //dodaj do ścieżki ten ruch
+        possiblePaths.get(possiblePaths.size() -1).setToX(moves[i].getToX());
+        possiblePaths.get(possiblePaths.size() -1).setToY(moves[i].getToY());
+
 
         if(moves[i].isJump()) { //jeśli to był skok
-          //TODO
-          System.out.println("skok: " + moves[i].isJump());
           checkWays(pawnNumber, moves[i].getToX(),moves[i].getToY(),false,true);
         }
       } else {
         if (wereIHere(moves[i],possiblePaths.size()-1)) continue;
         else {
-          //todo
-          System.out.println("jeszcze tu nie byłam");
           sizeWhileCreatingNewBranch = possiblePaths.get(possiblePaths.size() - 1).size();
               // rozgałęziamy
 
-          possiblePaths.add(new Path(pawnNumber));
+          int startX = possiblePaths.get(possiblePaths.size()-1).getFromX();
+          int startY = possiblePaths.get(possiblePaths.size()-1).getFromY();
+          possiblePaths.add(new Path(pawnNumber, startX, startY));
           //przepisz pierwsze ruchy z poprzedniej ścieżki
           for (int k = 0; k < sizeWhileCreatingNewBranch; k++) {
             possiblePaths.get(possiblePaths.size() - 1).add(possiblePaths.get(possiblePaths.size()-2).get(k));
@@ -218,6 +216,8 @@ public class BestMove {
           possiblePaths.get(possiblePaths.size() - 1).add(moves[i]);
           lastX = possiblePaths.get(possiblePaths.size() - 1).get(possiblePaths.get(possiblePaths.size() - 1).size() - 1).getToX();
           lastY = possiblePaths.get(possiblePaths.size() - 1).get(possiblePaths.get(possiblePaths.size() - 1).size() - 1).getToY();
+          possiblePaths.get(possiblePaths.size() -1).setToX(lastX);
+          possiblePaths.get(possiblePaths.size() -1).setToY(lastY);
           checkWays(pawnNumber, lastX, lastY, false,true);
         }
           //makeNewBranch(sizeWhileCreatingNewBranch, moves, pawnNumber);
@@ -231,24 +231,14 @@ public class BestMove {
     int j = indexOfPath;
     //sprawdź wszystkie ruchy danej ścieżki
     for (int k = 0; k < possiblePaths.get(j).size(); k++) {
-      //TODO print
-      System.out.println("k: " + k);
       //sprawdż ruchy w tej ścieżce
-      int fromXX = possiblePaths.get(j).get(k).getFromX();
-      int fromYY = possiblePaths.get(j).get(k).getFromY();
-      int toXX = possiblePaths.get(j).get(k).getToX();
-      int toYY = possiblePaths.get(j).get(k).getToY();
+      int fromXX=possiblePaths.get(j).get(k).getFromX();
+      int fromYY=possiblePaths.get(j).get(k).getFromY();
+      int toXX=possiblePaths.get(j).get(k).getToX();
+      int toYY=possiblePaths.get(j).get(k).getToY();
 
-      //TODO print
-      System.out.println("oldMove: " + fromXX +" "+ fromYY+ " " + toXX + " " + toYY);
-      System.out.println("newMove: " + move.getFromX()+" "+ move.getFromY()+" "+ move.getToX()+" "+ move.getFromY()  );
-
-      if (fromXX == move.getToX() && fromYY == move.getToY()) {
-        //TODO
-        System.out.println("return true");
+      if (fromXX==move.getToX()&&fromYY==move.getToY()) {
         return true;
-      } else {
-        System.out.println("tutaj nie");
       }
     }
     return false;
@@ -276,8 +266,6 @@ public class BestMove {
         result = (gameBoard[toX + 1][toY] != 0 && gameBoard[toX + 1][toY] != -1);
       }
     }
-    //todo ?????
-    //previousWasJump = true;
     firstStep = false;
     return result;
   }
@@ -296,9 +284,6 @@ public class BestMove {
     boolean isFirst = move.isFirst();
 
     boolean result;
-    //todo
-    boolean previous = move.isPreviousWasJump();
-
     if (fromX > size - 1 || fromX < 0 || fromY > size - 1 || fromY < 0
         || toX > size - 1 || toX < 0 || toY > size - 1 || toY < 0) {
       return false; //out of the array
@@ -333,12 +318,7 @@ public class BestMove {
         result = false;
       }
     }
-//TODO
-    System.out.println(" firstStep: " + move.isFirst() + " previousWasJump: " + previous +" check for... "
-      + fromX + " " + fromY + " " + toX + " " + toY + " " + isJump + " result: " + result);
 
-
-    //firstStep = false;
     return result;
   }
 
@@ -375,9 +355,67 @@ public class BestMove {
     return fields;
   }
 
+  private void calculateLength(int indexOfPath) {
+    int firstX = possiblePaths.get(indexOfPath).getFromX();
+    int firstY = possiblePaths.get(indexOfPath).getFromY();
+    int lastX = possiblePaths.get(indexOfPath).getToX();
+    int lastY = possiblePaths.get(indexOfPath).getToY();
+
+    int length = Math.abs(lastX -firstX) + Math.abs(lastY-firstY);
+    possiblePaths.get(indexOfPath).setLength(length);
+  }
+
+  private void calculateDistanceToGoal(int indexOfPath) {
+    int bestDistance = 0;
+    int distance;
+    int lastX = possiblePaths.get(indexOfPath).getToX();
+    int lastY = possiblePaths.get(indexOfPath).getToY();
+
+    for(int i = 0; i < size ; i++) {
+      for (int j = 0 ; j < size; j++) {
+        if(goals[i][j] == false) continue;
+        distance = Math.abs(lastX -i) + Math.abs(lastY-j);
+        if (distance > bestDistance) bestDistance = distance;
+      }
+    }
+
+    possiblePaths.get(indexOfPath).setDistanceToGoal(bestDistance);
+  }
+
   // TODO test
   public ArrayList<Path<Move>> getPossibleMoves() {
-    checkPawnsToFindBestMove();
     return possiblePaths;
   }
+
+  public Path chooseBestPath() {
+    for (int j = 0; j < possiblePaths.size(); j++) {
+      calculateDistanceToGoal(j);
+      calculateLength(j);
+    }
+
+    ArrayList<Path> closestToDestination = new ArrayList<>();
+
+    int goalDist=24;
+    int pathLength=0;
+    int index=0;
+    for(int i = 0; i < possiblePaths.size(); i++) {
+      if(possiblePaths.get(i).getDistanceToGoal() < goalDist) {
+        goalDist = possiblePaths.get(i).getDistanceToGoal();
+      }
+    }
+    for(int i = 0; i < possiblePaths.size(); i++) {
+      if(possiblePaths.get(i).getDistanceToGoal() == goalDist) {
+        closestToDestination.add(possiblePaths.get(i));
+      }
+    }
+    for(int i = 0; i < closestToDestination.size(); i++) {
+      if(closestToDestination.get(i).getLength() > pathLength) {
+        pathLength = closestToDestination.get(i).getLength();
+        index=i;
+      }
+    }
+
+    return closestToDestination.get(index);
+  }
+
 }
