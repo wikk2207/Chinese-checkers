@@ -1,8 +1,5 @@
 package boot;
 
-import player.PossibleMove;
-import tp.chinesecheckers.Server.GameBoard.CantRemovePawnException;
-import tp.chinesecheckers.Server.GameBoard.GameBoard;
 import tp.chinesecheckers.Server.GameBoard.Player;
 
 import java.util.ArrayList;
@@ -16,25 +13,15 @@ public class Boot implements Player {
   private int size;
   private int pawns;
   private int[][] gameBoard;
-  public boolean[][] goals; //todo private
-  private ArrayList<PossibleMove> possibleMoves;
-  private boolean previousWasJump;
 
 
   public Boot(int boardSize) {
-    this.size=boardSize;
+    this.size = boardSize;
     gameBoard = new int[boardSize][boardSize];
     pawns = (size - 1) / 4;
     playersIds = new int[6];
     configureGameBoard();
-    goals = new boolean[size][size];
-    for (int i = 0; i < size; i++) {
-      for (int j = 0; j < size; j++) {
-        goals[i][j] = false;
-      }
-    }
-    setGoals();//todo first set id
-    possibleMoves = new ArrayList<>();
+
   }
 
   private int amountOfPawns(int pawns) {
@@ -47,30 +34,20 @@ public class Boot implements Player {
   public static void main(String args[]) {
     Boot boot = new Boot(17);
     boot.setId(2);
-    boot.setOpponetsNum(3);
+    boot.setOpponetsNum(5);
     boot.start();
-    boot.setGoals();
     boot.otherPlayerMoved(3,5,3,8,8);
     try {
       boot.movePawn(0,0,4,4);
     } catch (MovingPawnBootException e) {
       System.out.println(e.getMessage());
     }
-    for(int j=16;j>=0;j--){
-      for (int i=0;i<17;i++){
-        if(boot.getGameBoard()[i][j] != -1)
-        {
+    for (int j = 16; j >= 0; j--) {
+      for (int i = 0; i < 17; i++) {
+        if (boot.getGameBoard()[i][j] != -1) {
           System.out.print(" ");
         }
         System.out.print(boot.getGameBoard()[i][j] + " ");
-      }
-      System.out.println();
-    }
-    for(int j=16;j>=0;j--) {
-      for (int i=0;i<17;i++) {
-        if (boot.goals[i][j]) System.out.print(1);
-        else System.out.print(0);
-        System.out.print(" ");
       }
       System.out.println();
     }
@@ -79,7 +56,7 @@ public class Boot implements Player {
 
   @Override
   public void start() {
-    for (int i = 0;i < opponents+1;i++) {
+    for (int i = 0; i < opponents + 1;i++) {
       addPlayerToBoard(playersIds[i]);
     }
   }
@@ -95,18 +72,17 @@ public class Boot implements Player {
 
   @Override
   public void yourTurn() {
-    myTurn=true;
+    myTurn = true;
   }
 
   @Override
   public void turnEnd() {
-    myTurn=false;
+    myTurn = false;
   }
 
-  @SuppressWarnings("Duplicates")
   @Override
   public void setOpponetsNum(int players) {
-    this.opponents=players;
+    this.opponents = players;
     switch (opponents) {
       case 1:
         playersIds[0] = 1;
@@ -139,16 +115,16 @@ public class Boot implements Player {
 
   @Override
   public void wrongMove() {
-    this.correctMove=false;
+    this.correctMove = false;
   }
 
   @Override
   public void correctMove() {
-    this.correctMove=true;
+    this.correctMove = true;
   }
 
   public void setId(int id) {
-    this.myId=id;
+    this.myId = id;
   }
 
   private void addPlayerToBoard(int playerId)  {
@@ -262,103 +238,6 @@ public class Boot implements Player {
     gameBoard[fromX][fromY] = 0;
   }
 
-  private void checkPawnsToFindBestMove() {
-    for (int i = 0; i < size; i++) {
-      for (int j = 0; j < size; j++) {
-        if(gameBoard[i][j]!=myId) continue;
-        checkWays(i,j);
-      }
-    }
-  }
 
-  private void setGoals() {
-    int i,j,x,y;
-    switch (myId) {
-      case 1: {
-        for (y = size - pawns, i = 0; i < pawns; i++) {
-          for (x = size - pawns - 1, j = 0; j < pawns - i; j++) {
-            goals[x - j][y + i] = true;
-          }
-        }
-        break;
-      }
-      case 2: {
-        for (y = size - pawns - 1, i = 0; i < pawns; i++) {
-          for (x = size - pawns, j = 0; j < pawns - i; j++) {
-            goals[x + j][y - i] = true;
-          }
-        }
-
-        break;
-      }
-      case 3: {
-        for (y = pawns, i = 0; i < pawns; i++) {
-          for (x = size - pawns - 1, j = 0; j < pawns - i; j++) {
-            goals[x - j][y + i] = true;
-          }
-        }
-
-        break;
-      }
-      case 4: {
-        for (i = 0,y = pawns - 1; i < pawns; i++) {
-          for (j = 0, x = pawns; j < pawns - i; j++) {
-            goals[x + j][y - i] = true;
-          }
-        }
-        break;
-      }
-      case 5: {
-        for (i = 0, y = pawns; i < pawns; i++) {
-          for (x = pawns - 1, j = 0; j < pawns - i; j++) {
-            goals[x - j][y + i] = true;
-          }
-        }
-
-
-        break;
-      }
-      case 6: {
-        for (y = size - pawns - 1, i = 0; i < pawns; i++) {
-          for (x = pawns, j = 0; j < pawns - i; j++) {
-            goals[x + j][y - i] = true;
-          }
-        }
-        break;
-      }
-    }
-  }
-
-  private void checkWays(int fromX, int fromY){
-    for (int i = 0; i < size; i++) {
-      for (int j = 0; j < size; j++) {
-        if(gameBoard[i][j]!=0) continue;
-
-      }
-    }
-  }
-
-  public boolean isMovePossible( int fromX, int fromY, int toX, int toY) {
-    if (fromX > size - 1 || fromX < 0 || fromY > size - 1 || fromY < 0 || toX > size - 1 || toX < 0 || toY > size - 1 || toY < 0) {
-      return false;
-    }
-    if (gameBoard[fromX][fromY] == -1 || gameBoard[toX][toY] == -1)  return false;
-    if (gameBoard[fromX][fromY] == 0) return false;
-    if (gameBoard[toX][toY] != 0) return false;
-
-    if (Math.abs(toY - fromY) > 1) {
-      if (Math.abs(toY - fromY) == 2 && fromX == toX && gameBoard[]) {
-        return true;
-      } else {
-        return false;
-      }
-
-    }
-    if (Math.abs(toX - fromX) > 1) return false;
-    if (toX == fromX - 1 && toY == fromY + 1) return false;
-    if (toX == fromX + 1 && toY == fromY - 1) return false;
-
-    return true;
-  }
 
 }
