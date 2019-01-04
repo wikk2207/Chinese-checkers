@@ -82,7 +82,7 @@ public class StartGui {
   @FXML
   void choose6Players(ActionEvent event) {
     players.setText("6");
-    playersInt = 5;
+    playersInt = 6;
     robot1.setVisible(true);
     robot2.setVisible(true);
     robot3.setVisible(true);
