@@ -19,6 +19,7 @@ public class Boot implements Player {
 
   public Boot(int boardSize, Game game) {
     this.size = boardSize;
+    this.game = game;
     gameBoard = new int[boardSize][boardSize];
     pawns = (size - 1) / 4;
     playersIds = new int[6];
