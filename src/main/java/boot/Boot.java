@@ -22,6 +22,7 @@ public class Boot implements Player {
     gameBoard = new int[boardSize][boardSize];
     pawns = (size - 1) / 4;
     playersIds = new int[6];
+    this.game = game;
     configureGameBoard();
   }
 
@@ -224,22 +225,11 @@ public class Boot implements Player {
         gameBoard[i][j] = -1;
       }
     }
-
-    /*for (int y = 0; y < size - pawns; y++) {
-      for (int x = size - pawns - 1; x > size - pawns - 2 - y; x--) {
-        gameBoard[x][y] = 0;
-      }
-    }*/
     for (int y = 0; y < size - pawns; y++) {
       for (int x = pawns; x < pawns + y + 1; x++) {
         gameBoard[x][y] = 0;
       }
     }
-    /*for (int y = pawns; y < size; y++) {
-      for (int x = pawns; x < size - y + pawns; x++) {
-        gameBoard[x][y] = 0;
-      }
-    }*/
     for (int y = pawns; y < size; y++) {
       for (int x = size - pawns - 1; x > y - pawns - 1; x--) {
         gameBoard[x][y] = 0;
