@@ -13,6 +13,7 @@ public class BoardBuilderDirector {
   public void setGameMode(int gameMode) {
     if (gameMode == 1) {
       boardBulider = new TenPawnsBoardBuilder();
+      boardBulider.createFrame();
     } else {
       //Jak na razie to jedyny tryb
       boardBulider = null;

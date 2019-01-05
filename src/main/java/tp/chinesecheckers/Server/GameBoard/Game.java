@@ -1,5 +1,8 @@
 package tp.chinesecheckers.Server.GameBoard;
 
+
+import boot.Boot;
+
 import java.net.Socket;
 
 /**
@@ -16,7 +19,7 @@ public class Game {
   private boolean setRules;
 
   private int currentPlayer;
-  private int allPlayerNum;
+  private int realPlayerNum;
   private int bootNum;
   private int iterator;
   private int begX;
@@ -93,14 +96,14 @@ public class Game {
 
   public void setRules(String players, String boots) {
     try {
-      allPlayerNum = Integer.parseInt(players);
+      realPlayerNum = Integer.parseInt(players);
       bootNum = Integer.parseInt(boots);
-      this.players = new Player[allPlayerNum];
-      setIDs(allPlayerNum);
+      this.players = new Player[realPlayerNum + bootNum];
+      setIDs(realPlayerNum + bootNum);
       this.players[0] = first;
       setRules = true;
       master.setGameMode(1);
-      master.setPlayerNumber(allPlayerNum);
+      master.setPlayerNumber(realPlayerNum + bootNum);
     } catch (NumberFormatException e) {
       System.err.println("Wrong player number");
     }
@@ -111,7 +114,7 @@ public class Game {
    * @return
    */
   public int howManyPlayers() {
-    return allPlayerNum - bootNum;
+    return realPlayerNum;
   }
 
   /**
@@ -120,26 +123,24 @@ public class Game {
    */
   public void addPlayer(Socket socket) {
     players[iterator] = new RealPlayer(this, socket, IDs[iterator]);
-    players[iterator].setOpponetsNum(allPlayerNum);
+    players[iterator].setOpponetsNum(realPlayerNum + bootNum);
     iterator++;
   }
 
-  /* TODO po stworzeniu boota
-  private void addBoot(parametry potrzebne do stworzenia boota) {
-    players[iterator] = new Boot(<nw>);
+//Ustawienie rozmiaru planszy
+  private void addBoot() {
+    players[iterator] = new Boot(17, this);
     iterator++;
   }
-  */
+
 
   /**
    *
    */
   public void runGame() {
-    /*
-    while(iterator < allPlayerNum) {
+    while(iterator < realPlayerNum + bootNum) {
       addBoot();
     }
-    */
     players[0] = first;
     for(int i = 0; i < players.length; i++) {
       players[i].start();
