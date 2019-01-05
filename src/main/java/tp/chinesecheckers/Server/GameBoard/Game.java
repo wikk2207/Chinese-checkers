@@ -75,10 +75,11 @@ public class Game {
         break;
 
       case 4:
-        IDs[0] = 2;
-        IDs[1] = 3;
-        IDs[2] = 5;
-        IDs[3] = 6;
+        IDs[0] = 1;
+        IDs[1] = 2;
+        IDs[2] = 4;
+        IDs[3] = 5;
+        break;
 
       case 6:
         IDs[0] = 1;
@@ -217,7 +218,11 @@ public class Game {
 
   public void endMove(int playerID) {
     if (playerID == IDs[currentPlayer]) {
+      if (jump) {
+        doneMove(previousX, previousY);
+      }
       nextPlayer();
+
     }
   }
 }
