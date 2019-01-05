@@ -14,4 +14,6 @@ public interface Player {
   void wrongMove();
 
   void correctMove();
+
+  void won();
 }
