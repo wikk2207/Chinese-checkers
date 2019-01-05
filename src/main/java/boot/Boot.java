@@ -1,5 +1,6 @@
 package boot;
 
+import tp.chinesecheckers.Server.GameBoard.Game;
 import tp.chinesecheckers.Server.GameBoard.Player;
 
 import java.util.ArrayList;
@@ -13,32 +14,29 @@ public class Boot implements Player {
   private int size;
   private int pawns;
   private int[][] gameBoard;
+  private Game game;
 
 
-  public Boot(int boardSize) {
+  public Boot(int boardSize, Game game) {
     this.size = boardSize;
     gameBoard = new int[boardSize][boardSize];
     pawns = (size - 1) / 4;
     playersIds = new int[6];
     configureGameBoard();
-
   }
 
-  private int amountOfPawns(int pawns) {
-    if (pawns == 1) return 1;
-    return pawns + amountOfPawns(pawns-1);
-  }
 
   //todo
   //for test
   public static void main(String args[]) {
-    Boot boot = new Boot(17);
+    Boot boot = new Boot(17, new Game());
     boot.setId(2);
     boot.setOpponetsNum(5);
     boot.start();
-    boot.otherPlayerMoved(3,5,3,8,8);
+    boot.otherPlayerMoved(3,4,10,8,8);
     try {
-      boot.movePawn(0,0,4,4);
+      boot.movePawn(5,3,5,4);
+     // boot.movePawn(4,0,5,6);
     } catch (MovingPawnBootException e) {
       System.out.println(e.getMessage());
     }
@@ -51,6 +49,28 @@ public class Boot implements Player {
       }
       System.out.println();
     }
+
+    BestMove bestMove = new BestMove(boot.getGameBoard(), 17, 1);
+    Path bestPath = bestMove.chooseBestPath();
+    int fromX = bestPath.getFromX();
+    int fromY = bestPath.getFromY();
+    int toX = bestPath.getToX();
+    int toY = bestPath.getToY();
+    try {
+      boot.movePawn(fromX,fromY,toX,toY);
+    } catch (MovingPawnBootException e) {
+      System.out.println(e.getMessage());
+    }
+    for (int j = 16; j >= 0; j--) {
+      for (int i = 0; i < 17; i++) {
+        if (boot.getGameBoard()[i][j] != -1) {
+          System.out.print(" ");
+        }
+        System.out.print(boot.getGameBoard()[i][j] + " ");
+      }
+      System.out.println();
+    }
+
   }
 
 
@@ -73,6 +93,12 @@ public class Boot implements Player {
   @Override
   public void yourTurn() {
     myTurn = true;
+    BestMove bestMove = new BestMove(gameBoard, size, myId);
+    Path bestPath = bestMove.chooseBestPath();
+    for(int i = 0; i < bestPath.size(); i++) {
+      move(bestPath.getMove(i));
+    }
+    game.endMove(myId);
   }
 
   @Override
@@ -238,6 +264,8 @@ public class Boot implements Player {
     gameBoard[fromX][fromY] = 0;
   }
 
-
+  private void move(Move move) {
+    game.move(myId, move.getFromX(), move.getFromY(), move.getToX(), move.getToY());
+  }
 
 }

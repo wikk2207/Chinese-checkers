@@ -9,7 +9,7 @@ public class BestMove {
   private int myId;
   private int pawns;
   public boolean[][] goals; //todo private
-  private ArrayList<Path<Move>> possiblePaths;
+  private ArrayList<Path> possiblePaths;
   //private boolean previousWasJump;
   private boolean firstStep;
 
@@ -72,7 +72,7 @@ public class BestMove {
 
     BestMove bestMove = new BestMove(gameBoard, 17, 1);
 
-    ArrayList<Path<Move>> possiblePaths = bestMove.getPossibleMoves();
+    ArrayList<Path> possiblePaths = bestMove.getPossibleMoves();
     Path bestPath = bestMove.chooseBestPath();
     System.out.print("Best move: ");
     System.out.println(bestPath.getFromX() +" "+ bestPath.getFromY() + " " +bestPath.getToX() + " " + bestPath.getToY());
@@ -166,17 +166,6 @@ public class BestMove {
   private void checkWays(int pawnNumber, int fromX, int fromY, boolean isFirst, boolean previousWasJump) {
     Move[] moves = arrayOfPossibleMoves(fromX, fromY, isFirst, previousWasJump);
 
-
-    /*if(previousWasJump) {
-      for (int i = 0; i < 12; i++) {
-        if(moves[i] != null) {
-          moves[i].setFirst(false);
-          moves[i].setPreviousWasJump(true);
-        }
-      }
-    }*/
-
-    Move[] newMoves;
     int sizeWhileCreatingNewBranch;
     int lastX;
     int lastY;
@@ -220,8 +209,6 @@ public class BestMove {
           possiblePaths.get(possiblePaths.size() -1).setToY(lastY);
           checkWays(pawnNumber, lastX, lastY, false,true);
         }
-          //makeNewBranch(sizeWhileCreatingNewBranch, moves, pawnNumber);
-
       }
     }
 
@@ -383,7 +370,7 @@ public class BestMove {
   }
 
   // TODO test
-  public ArrayList<Path<Move>> getPossibleMoves() {
+  public ArrayList<Path> getPossibleMoves() {
     return possiblePaths;
   }
 

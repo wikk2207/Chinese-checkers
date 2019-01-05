@@ -2,7 +2,7 @@ package boot;
 
 import java.util.ArrayList;
 
-public class Path<Move> extends ArrayList<Move> {
+public class Path {
   private int pawnId;
   private int length;
   private int distanceToGoal;
@@ -10,11 +10,17 @@ public class Path<Move> extends ArrayList<Move> {
   private int fromY;
   private int toX;
   private int toY;
+  private ArrayList<Move> path;
 
   Path(int pawnId, int fromX, int fromY) {
     this.pawnId = pawnId;
     this.fromX = fromX;
     this.fromY = fromY;
+    this.path = new ArrayList<>();
+  }
+
+  public void add (Move move) {
+    path.add(move);
   }
 
   public int getPawnId() {
@@ -59,5 +65,16 @@ public class Path<Move> extends ArrayList<Move> {
 
   public void setToY(int toY) {
     this.toY=toY;
+  }
+  public Move getMove(int index) {
+    return path.get(index);
+  }
+
+  public int size() {
+    return path.size();
+  }
+
+  public Move get(int index) {
+    return path.get(index);
   }
 }
