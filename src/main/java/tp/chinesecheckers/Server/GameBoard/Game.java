@@ -160,6 +160,9 @@ public class Game {
 
   private void nextPlayer() {
     players[currentPlayer].turnEnd();
+    if (master.isWinner(IDs[currentPlayer])) {
+      players[currentPlayer].won();
+    }
     currentPlayer++;
     if (currentPlayer == players.length) {
       currentPlayer = 0;
