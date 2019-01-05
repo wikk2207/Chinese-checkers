@@ -1,5 +1,6 @@
 package boot;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import tp.chinesecheckers.Server.GameBoard.Game;
 import tp.chinesecheckers.Server.GameBoard.Player;
 
@@ -10,6 +11,7 @@ public class Boot implements Player {
   private boolean myTurn;
   private int opponents;
   private int myId;
+  private int myRealId;
   private int[] playersIds;
   private int size;
   private int pawns;
@@ -17,8 +19,10 @@ public class Boot implements Player {
   private Game game;
 
 
-  public Boot(int boardSize, Game game) {
+  public Boot(int boardSize, Game game, int id) {
+    myId = 1;
     this.size = boardSize;
+    this.myRealId = id;
     this.game = game;
     gameBoard = new int[boardSize][boardSize];
     pawns = (size - 1) / 4;
@@ -31,8 +35,8 @@ public class Boot implements Player {
   //todo
   //for test
   public static void main(String args[]) {
-    Boot boot = new Boot(17, new Game());
-    boot.setId(2);
+    Boot boot = new Boot(17, new Game(), 1);
+    //boot.setId(2);
     boot.setOpponetsNum(5);
     boot.start();
     boot.otherPlayerMoved(3,4,10,8,8);
@@ -85,6 +89,8 @@ public class Boot implements Player {
 
   @Override
   public void otherPlayerMoved(int opponent, int begX, int begY, int endX, int endY) {
+    //TODO
+    //System.out.println(begX+ " " + begY+ " " + endX+ " " + endY);
     try {
       movePawn(begX,begY,endX,endY);
     } catch (MovingPawnBootException e) {
@@ -97,10 +103,18 @@ public class Boot implements Player {
     myTurn = true;
     BestMove bestMove = new BestMove(gameBoard, size, myId);
     Path bestPath = bestMove.chooseBestPath();
+    //TODO
+    //System.out.println(bestPath.getFromX() + " " + bestPath.getFromY() + " " + bestPath.getToX() + " " + bestPath.getToY());
     for(int i = 0; i < bestPath.size(); i++) {
       move(bestPath.getMove(i));
     }
-    game.endMove(myId);
+    //move(new Move(4,3,4,4,true,false,false));
+    game.endMove(myRealId);
+    try {
+      movePawn(bestPath.getFromX(),bestPath.getFromY(), bestPath.getToX(), bestPath.getToY());
+    } catch (MovingPawnBootException e) {
+      System.out.println(e.getMessage());
+    }
   }
 
   @Override
@@ -110,7 +124,9 @@ public class Boot implements Player {
 
   @Override
   public void setOpponetsNum(int players) {
-    this.opponents = players;
+    //TODO
+    this.opponents = players - 1;
+    //System.out.println("oopponents " +opponents);
     switch (opponents) {
       case 1:
         playersIds[0] = 1;
@@ -256,7 +272,9 @@ public class Boot implements Player {
   }
 
   private void move(Move move) {
-    game.move(myId, move.getFromX(), move.getFromY(), move.getToX(), move.getToY());
+    //TODO
+    //System.out.println("Send Move: "+ myRealId +" " + move.getFromX() + " " + move.getFromY() + " " + move.getToX() + " " + move.getToY());
+    game.move(myRealId, move.getFromX(), move.getFromY(), move.getToX(), move.getToY());
   }
 
 }

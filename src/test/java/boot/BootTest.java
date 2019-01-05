@@ -94,7 +94,7 @@ public class BootTest {
 
   @Before
   public void createBoot() {
-    boot = new Boot(17, new Game());
+    boot = new Boot(17, new Game(),1);
     boot.setId(1);
     boot.setOpponetsNum(5);
     boot.start();

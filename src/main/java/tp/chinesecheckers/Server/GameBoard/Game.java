@@ -129,7 +129,9 @@ public class Game {
 
 //Ustawienie rozmiaru planszy
   private void addBoot() {
-    players[iterator] = new Boot(17, this);
+    players[iterator] = new Boot(17, this, IDs[iterator]);
+    //TODO dodane przez Wike
+    players[iterator].setOpponetsNum(realPlayerNum + bootNum);
     iterator++;
   }
 
