@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+import tp.chinesecheckers.Server.GameBoard.Game;
 
 public class BootTest {
   Boot boot;
@@ -93,7 +94,7 @@ public class BootTest {
 
   @Before
   public void createBoot() {
-    boot = new Boot(17);
+    boot = new Boot(17, new Game());
     boot.setId(1);
     boot.setOpponetsNum(5);
     boot.start();

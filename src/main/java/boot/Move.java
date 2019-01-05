@@ -6,13 +6,18 @@ public class Move {
   private int toX;
   private int toY;
   private boolean isJump;
+  private boolean isFirst;
+  private boolean previousWasJump;
 
-  public Move(int fromX, int fromY, int toX, int toY, boolean isJump) {
+  public Move(int fromX, int fromY, int toX, int toY, boolean isFirst, boolean isJump, boolean previousWasJump) {
     this.fromX = fromX;
     this.fromY = fromY;
     this.toX = toX;
     this.toY = toY;
     this.isJump = isJump;
+    this.isFirst = isFirst;
+    this.previousWasJump = previousWasJump;
+
   }
 
   public int getToX() {
@@ -34,4 +39,21 @@ public class Move {
   public int getFromX() {
     return fromX;
   }
+
+  public boolean isFirst() {
+    return isFirst;
+  }
+
+  public void setFirst(boolean isFirst) {
+    this.isFirst = isFirst;
+  }
+
+  public boolean isPreviousWasJump() {
+    return previousWasJump;
+  }
+
+  public void setPreviousWasJump(boolean previousWasJump) {
+    this.previousWasJump=previousWasJump;
+  }
+
 }
