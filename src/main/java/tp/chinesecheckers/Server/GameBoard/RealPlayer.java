@@ -89,7 +89,12 @@ public class RealPlayer extends Thread implements Player {
 
   @Override
   public void yourTurn() {
-    output.println(YOUR_TURN);
+
+    if (won) {
+      turnEnd();
+    } else {
+      output.println(YOUR_TURN);
+    }
   }
 
   @Override
@@ -99,11 +104,7 @@ public class RealPlayer extends Thread implements Player {
 
   @Override
   public void turnEnd() {
-    if (won) {
-      turnEnd();
-    } else {
-      output.println(TURN_END);
-    }
+    output.println(TURN_END);
   }
 
   /**
