@@ -11,13 +11,14 @@ public class Client extends Thread{
   private final String SET_ID = "ID";
   private final String SET_OPPONENTS = "OPPONENTS";
   private final String SET_NUMBER_OF_PLAYERS = "CREATE_GAME";
-  private final String JOINED_TO_GAME = "JOIN_GAME";
   private final String OPPONENT_MOVED = "OPPONENT_MOVED";
   private final String YOUR_TURN = "YOUR_TURN";
   private final String TURN_END = "TURN_END";
   private final String START_GAME = "START_GAME";
   private final String WRONG_MOVE = "WRONG_MOVE";
   private final String CORRECT_MOVE = "CORRECT_MOVE";
+  private final String JOINED_TO_GAME = "JOIN_GAME";
+  private final String WON = "WON";
 
   public final String NUM_OF_PLAYERS = "PLAYERS";//<allPlayersNum> <bootNum>
   public final String MOVED = "MOVE";
@@ -112,7 +113,11 @@ public class Client extends Thread{
         } else if (response.equals(CORRECT_MOVE)) {
           System.out.println(response);
           counter.correctMove();
-      }
+        } else if (response.equals(CORRECT_MOVE)) {
+          System.out.println(response);
+          //TODO reakcja na zwycięstwo
+          //counter.youWon(); czy coś XD
+        }
       }
     } catch (IOException e) {
       System.err.println("Lost conection with server");

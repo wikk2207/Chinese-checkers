@@ -69,6 +69,10 @@ public class GameMaster {
     }
   }
 
+  public boolean isWinner(int playerID) {
+    return moveController.isWiner(gameBoard, playerID);
+  }
+
   /**
    *
    * @param mode

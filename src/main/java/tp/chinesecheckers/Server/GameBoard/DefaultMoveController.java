@@ -42,4 +42,54 @@ public class DefaultMoveController implements MoveController {
     }
     return false;
   }
+
+  @Override
+  public boolean isWiner(GameBoard gameBoard, int playerID) {
+    for (int i = 0; i < 4; i++) {
+      for (int j = 0; j <= i; j++) {
+        switch (playerID) {
+          case 1:
+            if (!gameBoard.isPlayer(9 + i, 13 + j, 1)) {
+              return false;
+            }
+            break;
+
+          case 2:
+            if (!gameBoard.isPlayer(13 + j, 9 + i, 2)) {
+              return false;
+            }
+            break;
+
+          case 3:
+            if (!gameBoard.isPlayer(9 + i, 4 + j, 3)) {
+              return false;
+            }
+            break;
+
+          case 4:
+            if (!gameBoard.isPlayer(4 + j, i, 4)) {
+              return false;
+            }
+            break;
+
+          case 5:
+            if (!gameBoard.isPlayer(i, 4 + j, 5)) {
+              return false;
+            }
+            break;
+
+          case 6:
+            if (!gameBoard.isPlayer(4 + j, 9 + i, 6)) {
+              return false;
+            }
+            break;
+
+          default:
+            return false;
+        }
+      }
+    }
+    return true;
+  }
+
 }

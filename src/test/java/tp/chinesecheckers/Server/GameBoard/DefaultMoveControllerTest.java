@@ -59,4 +59,39 @@ public class DefaultMoveControllerTest {
     assertFalse(controller.isMovePossible(gameBoard, 5, 10, 7, 10));
     assertFalse(controller.isMovePossible(gameBoard, 13, 11, 11, 11));
   }
+
+  @Test
+  public void isWinerTest() {
+    director = new BoardBuilderDirector();
+    director.setGameMode(1);
+    gameBoard = director.buildGameBoard(6);
+    controller = new DefaultMoveController();
+
+
+    assertFalse(controller.isWiner(gameBoard, 1));
+    assertFalse(controller.isWiner(gameBoard, 2));
+    assertFalse(controller.isWiner(gameBoard, 3));
+    assertFalse(controller.isWiner(gameBoard, 4));
+    assertFalse(controller.isWiner(gameBoard, 5));
+    assertFalse(controller.isWiner(gameBoard, 6));
+
+    for (int i = 0; i < 4; i++) {
+      for (int j = 0; j <= i; j++) {
+        gameBoard.addPawn(4 + j, i, 4);
+        gameBoard.addPawn(i, 4 + j, 5);
+        gameBoard.addPawn(4 + j, 9 + i, 6);
+        gameBoard.addPawn(9 + i, 13 + j, 1);
+        gameBoard.addPawn(13 + j, 9 + i, 2);
+        gameBoard.addPawn(9 + i, 4 + j, 3);
+      }
+    }
+
+    assertTrue(controller.isWiner(gameBoard, 1));
+    assertTrue(controller.isWiner(gameBoard, 2));
+    assertTrue(controller.isWiner(gameBoard, 3));
+    assertTrue(controller.isWiner(gameBoard, 4));
+    assertTrue(controller.isWiner(gameBoard, 5));
+    assertTrue(controller.isWiner(gameBoard, 6));
+
+  }
 }

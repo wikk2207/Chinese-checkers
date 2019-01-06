@@ -61,5 +61,9 @@ public class GameBoard {
     return board[x][y] == 0;
   }
 
+  public boolean isPlayer(int x, int y, int playerID) {
+    return board[x][y] == playerID;
+  }
+
 
 }

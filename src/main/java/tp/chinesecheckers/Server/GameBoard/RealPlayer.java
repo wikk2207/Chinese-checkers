@@ -17,6 +17,7 @@ public class RealPlayer extends Thread implements Player {
   private final String WRONG_MOVE = "WRONG_MOVE";
   private final String CORRECT_MOVE = "CORRECT_MOVE";
   private final String JOINED_TO_GAME = "JOIN_GAME";
+  private final String WON = "WON";
 
   public final String NUM_OF_PLAYERS = "PLAYERS";//<allPlayersNum> <bootNum>
   public final String MOVED = "MOVE";
@@ -29,6 +30,8 @@ public class RealPlayer extends Thread implements Player {
   private BufferedReader input;
   private PrintWriter output;
 
+  private boolean won;
+
   /**
    *
    * @param game
@@ -39,6 +42,7 @@ public class RealPlayer extends Thread implements Player {
     this.game = game;
     this.socket = socket;
     this.id = id;
+    won = false;
     try {
       input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       output = new PrintWriter(socket.getOutputStream(), true);
@@ -95,7 +99,11 @@ public class RealPlayer extends Thread implements Player {
 
   @Override
   public void turnEnd() {
-    output.println(TURN_END);
+    if (won) {
+      turnEnd();
+    } else {
+      output.println(TURN_END);
+    }
   }
 
   /**
@@ -134,5 +142,11 @@ public class RealPlayer extends Thread implements Player {
         System.err.println("Can't close socket" + e);
       }
     }
+  }
+
+  @Override
+  public void won() {
+    output.println(WON);
+    won = true;
   }
 }
