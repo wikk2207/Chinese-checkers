@@ -18,6 +18,7 @@ public class Boot implements Player {
   private int[][] gameBoard;
   private Game game;
   private int[][] achievedGoals;
+  private boolean victory;
 
 
   public Boot(int boardSize, Game game, int id) {
@@ -30,6 +31,7 @@ public class Boot implements Player {
     playersIds = new int[6];
     this.game = game;
     configureGameBoard();
+    victory = false;
 
     achievedGoals = new int[size][size];
     configureGoals();
@@ -139,23 +141,27 @@ public class Boot implements Player {
 
   @Override
   public void yourTurn() {
-    myTurn=true;
-    configureGoals();
-    BestMove bestMove=new BestMove(gameBoard, size, myId, achievedGoals);
-    //TODO
-    Path bestPath=bestMove.chooseBestPath();
-    //Path bestPath=bestMove.chooseBestPath4();
-    try {
-      Thread.sleep(1000);
-      for (int i=0; i<bestPath.size(); i++) {
-        move(bestPath.getMove(i));
+    if(victory) {
+      game.endMove(myRealId);
+    } else {
+      myTurn=true;
+      configureGoals();
+      BestMove bestMove=new BestMove(gameBoard, size, myId, achievedGoals);
+      //TODO
+      Path bestPath=bestMove.chooseBestPath();
+      //Path bestPath=bestMove.chooseBestPath4();
+      try {
+        Thread.sleep(1000);
+        for (int i=0; i<bestPath.size(); i++) {
+          move(bestPath.getMove(i));
+        }
+      } catch (InterruptedException e) {
+        System.out.println(e.getMessage());
       }
-    } catch (InterruptedException e) {
-      System.out.println(e.getMessage());
-    }
 
-    //move(new Move(4,3,4,4,true,false,false));
-    game.endMove(myRealId);
+      //move(new Move(4,3,4,4,true,false,false));
+      game.endMove(myRealId);
+    }
   }
   @Override
   public void turnEnd() {
@@ -325,7 +331,7 @@ public class Boot implements Player {
 
   @Override
   public void won() {
-
+      victory = true;
   }
 
 }
