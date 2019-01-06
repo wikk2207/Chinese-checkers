@@ -17,6 +17,7 @@ public class Boot implements Player {
   private int pawns;
   private int[][] gameBoard;
   private Game game;
+  private int[][] achievedGoals;
 
 
   public Boot(int boardSize, Game game, int id) {
@@ -29,6 +30,41 @@ public class Boot implements Player {
     playersIds = new int[6];
     this.game = game;
     configureGameBoard();
+
+    achievedGoals = new int[size][size];
+    configureGoals();
+  }
+  private void configureGoals() {
+    int i, j, x, y;
+    for ( i = 0; i < size; i++) {
+      for (j = 0; j < size; j++) {
+        achievedGoals[i][j] = -1;
+      }
+    }
+    for (y = size - pawns, i = 0; i < pawns; i++) {
+      for (x = size - pawns - 1, j = 0; j < pawns - i; j++) {
+        achievedGoals[x - j][y + i] = 0;
+      }
+    }
+
+    if(gameBoard[12][16] == myId) {
+      achievedGoals[12][16]=1;
+      if (gameBoard[12][15]==myId) achievedGoals[12][15]=1;
+      if (gameBoard[11][15]==myId) achievedGoals[11][15]=1;
+
+      if (gameBoard[12][15]==myId&&gameBoard[11][15]==myId) {
+        if (gameBoard[10][14]==myId) achievedGoals[10][14]=1;
+        if (gameBoard[11][14]==myId) achievedGoals[11][14]=1;
+        if (gameBoard[12][14]==myId) achievedGoals[12][14]=1;
+
+        if (gameBoard[10][14]==myId&&gameBoard[11][14]==myId&&gameBoard[12][14]==myId) {
+          if (gameBoard[9][13]==myId) achievedGoals[9][13]=1;
+          if (gameBoard[10][13]==myId) achievedGoals[10][13]=1;
+          if (gameBoard[11][13]==myId) achievedGoals[1][13]=1;
+          if (gameBoard[12][13]==myId) achievedGoals[12][13]=1;
+        }
+      }
+    }
   }
 
 
@@ -56,7 +92,7 @@ public class Boot implements Player {
       System.out.println();
     }
 
-    BestMove bestMove = new BestMove(boot.getGameBoard(), 17, 1);
+    BestMove bestMove = new BestMove(boot.getGameBoard(), 17, 1, null);
     Path bestPath = bestMove.chooseBestPath();
     int fromX = bestPath.getFromX();
     int fromY = bestPath.getFromY();
@@ -100,23 +136,24 @@ public class Boot implements Player {
 
   @Override
   public void yourTurn() {
-    myTurn = true;
-    BestMove bestMove = new BestMove(gameBoard, size, myId);
-    Path bestPath = bestMove.chooseBestPath();
+    myTurn=true;
+    configureGoals();
+    BestMove bestMove=new BestMove(gameBoard, size, myId, achievedGoals);
     //TODO
-    //System.out.println(bestPath.getFromX() + " " + bestPath.getFromY() + " " + bestPath.getToX() + " " + bestPath.getToY());
-    for(int i = 0; i < bestPath.size(); i++) {
-      move(bestPath.getMove(i));
-    }
-    //move(new Move(4,3,4,4,true,false,false));
-    game.endMove(myRealId);
+    Path bestPath=bestMove.chooseBestPath();
+    //Path bestPath=bestMove.chooseBestPath4();
     try {
-      movePawn(bestPath.getFromX(),bestPath.getFromY(), bestPath.getToX(), bestPath.getToY());
-    } catch (MovingPawnBootException e) {
+      Thread.sleep(1000);
+      for (int i=0; i<bestPath.size(); i++) {
+        move(bestPath.getMove(i));
+      }
+    } catch (InterruptedException e) {
       System.out.println(e.getMessage());
     }
-  }
 
+    //move(new Move(4,3,4,4,true,false,false));
+    game.endMove(myRealId);
+  }
   @Override
   public void turnEnd() {
     myTurn = false;
@@ -272,9 +309,15 @@ public class Boot implements Player {
   }
 
   private void move(Move move) {
+    try {
+      movePawn(move.getFromX(), move.getFromY(), move.getToX(), move.getToY());
+      game.move(myRealId, move.getFromX(), move.getFromY(), move.getToX(), move.getToY());
+    } catch (MovingPawnBootException e) {
+      System.out.println(myRealId + e.getMessage());
+    }
     //TODO
     //System.out.println("Send Move: "+ myRealId +" " + move.getFromX() + " " + move.getFromY() + " " + move.getToX() + " " + move.getToY());
-    game.move(myRealId, move.getFromX(), move.getFromY(), move.getToX(), move.getToY());
+
   }
 
 }
