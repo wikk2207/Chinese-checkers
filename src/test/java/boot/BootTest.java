@@ -11,7 +11,7 @@ import tp.chinesecheckers.Server.GameBoard.Game;
 public class BootTest {
   Boot boot;
 
-  @Test
+  /*@Test
   public void otherPlayerMovedTest() {
 
     boot.otherPlayerMoved(1,5,3,8,8);
@@ -33,7 +33,7 @@ public class BootTest {
       Assert.assertEquals(2,actualEnd);
     } catch (MovingPawnBootException e) {
     }
-  }
+  }*/
 
   //Beginning out of the board
   @Test (expected=MovingPawnBootException.class)

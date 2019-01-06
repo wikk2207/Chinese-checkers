@@ -19,6 +19,7 @@ public class Boot implements Player {
   private Game game;
   private int[][] achievedGoals;
   private boolean victory;
+  private boolean answer;
 
 
   public Boot(int boardSize, Game game, int id) {
@@ -32,10 +33,14 @@ public class Boot implements Player {
     this.game = game;
     configureGameBoard();
     victory = false;
+    answer = false;
 
     achievedGoals = new int[size][size];
     configureGoals();
   }
+
+  //TO CONFIGURE BOOT
+
   private void configureGoals() {
     int i, j, x, y;
     for ( i = 0; i < size; i++) {
@@ -67,150 +72,6 @@ public class Boot implements Player {
         }
       }
     }
-  }
-
-
-  //todo
-  //for test
-  public static void main(String args[]) {
-    Boot boot = new Boot(17, new Game(), 1);
-    //boot.setId(2);
-    boot.setOpponetsNum(5);
-    boot.start();
-    boot.otherPlayerMoved(3,4,10,8,8);
-    try {
-      boot.movePawn(5,3,5,4);
-     // boot.movePawn(4,0,5,6);
-    } catch (MovingPawnBootException e) {
-      System.out.println(e.getMessage());
-    }
-    for (int j = 16; j >= 0; j--) {
-      for (int i = 0; i < 17; i++) {
-        if (boot.getGameBoard()[i][j] != -1) {
-          System.out.print(" ");
-        }
-        System.out.print(boot.getGameBoard()[i][j] + " ");
-      }
-      System.out.println();
-    }
-
-    BestMove bestMove = new BestMove(boot.getGameBoard(), 17, 1, null);
-    Path bestPath = bestMove.chooseBestPath();
-    int fromX = bestPath.getFromX();
-    int fromY = bestPath.getFromY();
-    int toX = bestPath.getToX();
-    int toY = bestPath.getToY();
-    try {
-      boot.movePawn(fromX,fromY,toX,toY);
-    } catch (MovingPawnBootException e) {
-      System.out.println(e.getMessage());
-    }
-    for (int j = 16; j >= 0; j--) {
-      for (int i = 0; i < 17; i++) {
-        if (boot.getGameBoard()[i][j] != -1) {
-          System.out.print(" ");
-        }
-        System.out.print(boot.getGameBoard()[i][j] + " ");
-      }
-      System.out.println();
-    }
-
-  }
-
-
-  @Override
-  public void start() {
-    for (int i = 0; i < opponents + 1;i++) {
-      addPlayerToBoard(playersIds[i]);
-    }
-  }
-
-  @Override
-  public void otherPlayerMoved(int opponent, int begX, int begY, int endX, int endY) {
-    //TODO
-    //System.out.println(begX+ " " + begY+ " " + endX+ " " + endY);
-    gameBoard[endX][endY] = opponent + 1;
-    gameBoard[begX][begY] = 0;
-
-   /* try {
-      movePawn(begX,begY,endX,endY);
-    } catch (MovingPawnBootException e) {
-      System.out.println(e.getMessage());
-    }*/
-  }
-
-  @Override
-  public void yourTurn() {
-    if(victory) {
-      game.endMove(myRealId);
-    } else {
-      myTurn=true;
-      configureGoals();
-      BestMove bestMove=new BestMove(gameBoard, size, myId, achievedGoals);
-      //TODO
-      Path bestPath=bestMove.chooseBestPath();
-      //Path bestPath=bestMove.chooseBestPath4();
-      try {
-        Thread.sleep(1000);
-        for (int i=0; i<bestPath.size(); i++) {
-          move(bestPath.getMove(i));
-        }
-      } catch (InterruptedException e) {
-        System.out.println(e.getMessage());
-      }
-
-      //move(new Move(4,3,4,4,true,false,false));
-      game.endMove(myRealId);
-    }
-  }
-  @Override
-  public void turnEnd() {
-    myTurn = false;
-  }
-
-  @Override
-  public void setOpponetsNum(int players) {
-    //TODO
-    this.opponents = players - 1;
-    //System.out.println("oopponents " +opponents);
-    switch (opponents) {
-      case 1:
-        playersIds[0] = 1;
-        playersIds[1] = 4;
-        break;
-
-      case 2:
-        playersIds[0] = 1;
-        playersIds[1] = 3;
-        playersIds[2] = 5;
-        break;
-
-      case 3:
-        playersIds[0] = 2;
-        playersIds[1] = 3;
-        playersIds[2] = 5;
-        playersIds[3] = 6;
-        break;
-
-      case 5:
-        playersIds[0] = 1;
-        playersIds[1] = 2;
-        playersIds[2] = 3;
-        playersIds[3] = 4;
-        playersIds[4] = 5;
-        playersIds[5] = 6;
-        break;
-    }
-  }
-
-  @Override
-  public void wrongMove() {
-    this.correctMove = false;
-  }
-
-  @Override
-  public void correctMove() {
-    this.correctMove = true;
   }
 
   public void setId(int id) {
@@ -277,11 +138,6 @@ public class Boot implements Player {
     }
   }
 
-  //todo method for tests
-  public int[][] getGameBoard() {
-    return this.gameBoard;
-  }
-
   private void configureGameBoard() {
     for (int i = 0; i < size; i++) {
       for (int j = 0; j < size; j++) {
@@ -307,9 +163,9 @@ public class Boot implements Player {
     if (gameBoard[fromX][fromY] == -1 || gameBoard[toX][toY] == -1) {
       throw new MovingPawnBootException("Out of the board");
     }
-    /*if (gameBoard[fromX][fromY] == 0) {
+    if (gameBoard[fromX][fromY] == 0) {
       throw  new MovingPawnBootException("Field where you begin movement is empty.");
-    }*/
+    }
     if (gameBoard[toX][toY] != 0) {
       throw new MovingPawnBootException("Field where you end movement isn't empty.");
     }
@@ -317,21 +173,131 @@ public class Boot implements Player {
     gameBoard[fromX][fromY] = 0;
   }
 
-  private void move(Move move) {
-    try {
-      movePawn(move.getFromX(), move.getFromY(), move.getToX(), move.getToY());
-      game.move(myRealId, move.getFromX(), move.getFromY(), move.getToX(), move.getToY());
-    } catch (MovingPawnBootException e) {
-      System.out.println(myRealId + e.getMessage());
-    }
-    //TODO
-    //System.out.println("Send Move: "+ myRealId +" " + move.getFromX() + " " + move.getFromY() + " " + move.getToX() + " " + move.getToY());
+  //METHODS USED BY GAME
 
+  @Override
+  public void start() {
+    for (int i = 0; i < opponents + 1;i++) {
+      addPlayerToBoard(playersIds[i]);
+    }
+  }
+
+  @Override
+  public void otherPlayerMoved(int opponent, int begX, int begY, int endX, int endY) {
+    //TODO
+    //System.out.println(begX+ " " + begY+ " " + endX+ " " + endY);
+    //gameBoard[endX][endY] = gameBoard[begX][begY];
+    //gameBoard[begX][begY] = 0;
+
+   try {
+      movePawn(begX,begY,endX,endY);
+    } catch (MovingPawnBootException e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  @Override
+  public void yourTurn() {
+    myTurn = true;
+    if (victory) {
+      game.endMove(myRealId);
+    } else {
+      configureGoals();
+      DefaultBestMove bestMove = new DefaultBestMove(gameBoard, size, myId, achievedGoals);
+      Path bestPath = bestMove.chooseBestPath();
+      if(bestPath == null) {
+        game.endMove(myRealId);
+        return;
+      }
+      try {
+        //TODO uncomment sleep
+        //Thread.sleep(1000);
+        for (int i = 0; i < bestPath.size(); i++) {
+          if (!move(bestPath.getMove(i))) {
+            game.endMove(myRealId);//jeśli nie mogę tak się ruszyć, pomiń ten ruch
+            //TODO
+            System.out.println("pomijam");
+            i=bestPath.size();
+          } else {
+            movePawn(bestPath.getMove(i).getFromX(), bestPath.getMove(i).getFromY(), bestPath.getMove(i).getToX(), bestPath.getMove(i).getToY());
+          }
+        }
+      //} catch (InterruptedException e) {
+        //System.out.println(e.getMessage());
+      } catch (MovingPawnBootException e) {
+        System.out.println(myRealId+e.getMessage());
+      }
+      game.endMove(myRealId);
+    }
+  }
+
+  @Override
+  public void turnEnd() {
+    myTurn = false;
+  }
+
+  @Override
+  public void setOpponetsNum(int players) {
+    //TODO
+    this.opponents = players - 1;
+    //System.out.println("oopponents " +opponents);
+    switch (opponents) {
+      case 1:
+        playersIds[0] = 1;
+        playersIds[1] = 4;
+        break;
+
+      case 2:
+        playersIds[0] = 1;
+        playersIds[1] = 3;
+        playersIds[2] = 5;
+        break;
+
+      case 3:
+        playersIds[0] = 2;
+        playersIds[1] = 3;
+        playersIds[2] = 5;
+        playersIds[3] = 6;
+        break;
+
+      case 5:
+        playersIds[0] = 1;
+        playersIds[1] = 2;
+        playersIds[2] = 3;
+        playersIds[3] = 4;
+        playersIds[4] = 5;
+        playersIds[5] = 6;
+        break;
+    }
+  }
+
+  @Override
+  public void wrongMove() {
+    this.correctMove = false;
+    answer = true;
+  }
+
+  @Override
+  public void correctMove() {
+    this.correctMove = true;
+    answer = true;
   }
 
   @Override
   public void won() {
-      victory = true;
+    victory = true;
   }
 
+  //METHODS USING GAME
+  private boolean move(Move move) {
+    //TODO print
+    System.out.println("wysyłam "+myRealId+ " " + move.getFromX()+ " " +  move.getFromY()+ " " +  move.getToX()+ " " +  move.getToY());
+    game.move(myRealId, move.getFromX(), move.getFromY(), move.getToX(), move.getToY());
+    while (!answer) {
+        //waiting
+    }
+    answer = false;
+
+    return correctMove;
+  }
 }

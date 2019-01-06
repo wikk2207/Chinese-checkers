@@ -66,6 +66,7 @@ public class Path {
   public void setToY(int toY) {
     this.toY=toY;
   }
+
   public Move getMove(int index) {
     return path.get(index);
   }

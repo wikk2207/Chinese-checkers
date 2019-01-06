@@ -4,135 +4,50 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class BestMove {
+public class DefaultBestMove {
   private int[][] gameBoard;
   private int size;
   private int myId;
   private int pawns;
-  public boolean[][] goals; //todo private
+  private boolean[][] goals;
   private ArrayList<Path> possiblePaths;
-  //private boolean previousWasJump;
-  private boolean firstStep;
   private Random random;
-  int[][] achieved;
+  private int[][] achieved;
 
 
-  BestMove(int[][] gameBoard, int size, int myId, int[][] achieved) {
+  DefaultBestMove(int[][] gameBoard, int size, int myId, int[][] achieved) {
     this.gameBoard = gameBoard;
     this.size = size;
     this.myId = myId;
     this.achieved = achieved;
+
     pawns = (size - 1) / 4;
     random = new Random();
-
     goals = new boolean[size][size];
+    possiblePaths = new ArrayList<>();
+
     for (int i = 0; i < size; i++) {
       for (int j = 0; j < size; j++) {
         goals[i][j] = false;
       }
     }
-    setGoals();//todo first set id
-    possiblePaths = new ArrayList<>();
-    //previousWasJump = false;
-    firstStep = true;
 
+    setGoals();
     checkPawnsToFindBestMove();
-
   }
 
-  //TODO for test
-  public static void main(String args[]) {
-    int[][] gameBoard = new int[17][17];
-    int size = 17;
-    int pawns = 4;
-
-    for (int i = 0; i < size; i++) {
-      for (int j = 0; j < size; j++) {
-        gameBoard[i][j] = -1;
-      }
-    }
-    for (int y = 0; y < size - pawns; y++) {
-      for (int x = pawns; x < pawns + y + 1; x++) {
-        gameBoard[x][y] = 0;
-      }
-    }
-    for (int y = pawns; y < size; y++) {
-      for (int x = size - pawns - 1; x > y - pawns - 1; x--) {
-        gameBoard[x][y] = 0;
-      }
-    }
-
-    for (int i = 0,y = pawns - 1; i < pawns; i++) {
-      for (int j = 0, x = pawns; j < pawns - i; j++) {
-        gameBoard[x + j][y - i] = 1;
-      }
-    }
-//moves
-
-    gameBoard[5][3] = 0;
-    gameBoard[5][4] = 1;
-    gameBoard[4][0] = 0;
-    gameBoard[12][16] = 1;
-
-    int[][] tab = new int[17][17];
-    for (int i = 0; i < size; i++) {
-      for (int j = 0; j < size; j++) {
-        gameBoard[i][j] = 0;
-      }
-    }
-
-
-
-    BestMove bestMove = new BestMove(gameBoard, 17, 1,tab);
-
-    ArrayList<Path> possiblePaths = bestMove.getPossibleMoves();
-    Path bestPath = bestMove.chooseBestPath();
-    System.out.print("Best move: ");
-    System.out.println(bestPath.getFromX() +" "+ bestPath.getFromY() + " " +bestPath.getToX() + " " + bestPath.getToY());
-
-    for (int i = 0; i < possiblePaths.size(); i++) {
-      System.out.println(i + ". New way... " + possiblePaths.get(i).getLength() + " " +possiblePaths.get(i).getDistanceToGoal() );
-      for (int j = 0; j < possiblePaths.get(i).size(); j++) {
-        System.out.println("  " + possiblePaths.get(i).get(j).getFromX()
-            + " " + possiblePaths.get(i).get(j).getFromY()
-            + " " + possiblePaths.get(i).get(j).getToX()
-            + " " + possiblePaths.get(i).get(j).getToY());
-      }
-    }
-
-    for (int j = 16; j >= 0; j--) {
-      for (int i = 0; i < 17; i++) {
-        if (gameBoard[i][j] != -1) {
-          System.out.print(" ");
-        }
-        System.out.print(gameBoard[i][j] + " ");
-      }
-      System.out.println();
-    }
-    for (int j = 16; j >= 0; j--) {
-      for (int i = 0; i < 17; i++) {
-        if (bestMove.getGoals()[i][j]) {
-          System.out.print("1 ");
-        } else {
-          System.out.print("0 ");
-        }
-      }
-      System.out.println();
-    }
-
-
-
-  }
-
-
+  /**
+   * This method check posibble ways for every pawn.
+   */
   private void checkPawnsToFindBestMove() {
     int pawnNumber = 1;
+
     for (int i = 0; i < size; i++) {
       for (int j = 0; j < size; j++) {
         if (gameBoard[i][j] != myId) {
           continue;
         }
-        if(gameBoard[i][j] == myId && achieved[i][j] == 1) {
+        if (gameBoard[i][j] == myId && achieved[i][j] == 1) {
           continue;
         }
         checkWays(pawnNumber,i, j, true,false);
@@ -141,18 +56,22 @@ public class BestMove {
     }
   }
 
+  /**
+   * This method set desstinations for pawns.
+   */
   private void setGoals() {
     int i;
     int j;
     int x;
     int y;
 
-    if(gameBoard[12][16] != myId) {
+    if (gameBoard[12][16] != myId) {
       goals[12][16] = true;
-    } else if(gameBoard[12][15] != myId || gameBoard[11][15] != myId) {
-        goals[12][15] = true;
-        goals[11][15] = true;
-    } else if (gameBoard[10][14] != myId || gameBoard[11][14] != myId || gameBoard[12][14] != myId) {
+    } else if (gameBoard[12][15] != myId || gameBoard[11][15] != myId) {
+      goals[12][15] = true;
+      goals[11][15] = true;
+    } else if (gameBoard[10][14] != myId || gameBoard[11][14] != myId
+        || gameBoard[12][14] != myId) {
       goals[10][14] = true;
       goals[11][14] = true;
       goals[12][14] = true;
@@ -170,55 +89,64 @@ public class BestMove {
         }
       }
     }
-
   }
 
+  /**
+   * This method checks every possibility of movement for one pawn.
+   * @param pawnNumber Id of pawn which is checked.
+   * @param fromX Coordinate X of field where pawn starts movement.
+   * @param fromY Coordinate Y of field where pawn starts movement.
+   * @param isFirst Is move the first one in the path?
+   * @param previousWasJump Was previous move a jump?
+   */
   private void checkWays(int pawnNumber, int fromX, int fromY, boolean isFirst, boolean previousWasJump) {
     Move[] moves = arrayOfPossibleMoves(fromX, fromY, isFirst, previousWasJump);
 
-    if(moves == null) return;
+    if (moves == null) {
+      return;
+    }
 
     int sizeWhileCreatingNewBranch;
     int lastX;
     int lastY;
 
     for (int i = 0; i < 12; i++) {
-      if(moves[i] != null) {
+      if (moves[i] != null) {
         break;
       }
     }
 
     for (int i = 0; i < 12; i++) {
-      if(moves[i] == null) continue;
+      if (moves[i] == null) continue;
 
       if (moves[i].isFirst()) {
         possiblePaths.add(new Path(pawnNumber,moves[i].getFromX(), moves[i].getFromY())); //dodaj nową ścieżkę dla tej możliwości
         possiblePaths.get(possiblePaths.size() - 1).add(moves[i]); //dodaj do ścieżki ten ruch
-        possiblePaths.get(possiblePaths.size() -1).setToX(moves[i].getToX());
-        possiblePaths.get(possiblePaths.size() -1).setToY(moves[i].getToY());
+        possiblePaths.get(possiblePaths.size() - 1).setToX(moves[i].getToX());
+        possiblePaths.get(possiblePaths.size() - 1).setToY(moves[i].getToY());
 
 
-        if(moves[i].isJump()) { //jeśli to był skok
+        if (moves[i].isJump()) { //jeśli to był skok
           checkWays(pawnNumber, moves[i].getToX(),moves[i].getToY(),false,true);
         }
       } else {
-        if (wereIHere(moves[i],possiblePaths.size()-1)) continue;
-        else {
+        if (wereIHere(moves[i],possiblePaths.size() - 1)) {
+          continue;
+        } else {
           sizeWhileCreatingNewBranch = possiblePaths.get(possiblePaths.size() - 1).size();
-              // rozgałęziamy
-
-          int startX = possiblePaths.get(possiblePaths.size()-1).getFromX();
-          int startY = possiblePaths.get(possiblePaths.size()-1).getFromY();
+          // rozgałęziamy
+          int startX = possiblePaths.get(possiblePaths.size() - 1).getFromX();
+          int startY = possiblePaths.get(possiblePaths.size() - 1).getFromY();
           possiblePaths.add(new Path(pawnNumber, startX, startY));
           //przepisz pierwsze ruchy z poprzedniej ścieżki
           for (int k = 0; k < sizeWhileCreatingNewBranch; k++) {
-            possiblePaths.get(possiblePaths.size() - 1).add(possiblePaths.get(possiblePaths.size()-2).get(k));
+            possiblePaths.get(possiblePaths.size() - 1).add(possiblePaths.get(possiblePaths.size() - 2).get(k));
           }
           possiblePaths.get(possiblePaths.size() - 1).add(moves[i]);
           lastX = possiblePaths.get(possiblePaths.size() - 1).get(possiblePaths.get(possiblePaths.size() - 1).size() - 1).getToX();
           lastY = possiblePaths.get(possiblePaths.size() - 1).get(possiblePaths.get(possiblePaths.size() - 1).size() - 1).getToY();
-          possiblePaths.get(possiblePaths.size() -1).setToX(lastX);
-          possiblePaths.get(possiblePaths.size() -1).setToY(lastY);
+          possiblePaths.get(possiblePaths.size() - 1).setToX(lastX);
+          possiblePaths.get(possiblePaths.size() - 1).setToY(lastY);
           checkWays(pawnNumber, lastX, lastY, false,true);
         }
       }
@@ -227,16 +155,14 @@ public class BestMove {
   }
 
   private boolean wereIHere(Move move, int indexOfPath) {
-    int j = indexOfPath;
+    int fromX;
+    int fromY;
     //sprawdź wszystkie ruchy danej ścieżki
-    for (int k = 0; k < possiblePaths.get(j).size(); k++) {
+    for (int k = 0; k < possiblePaths.get(indexOfPath).size(); k++) {
       //sprawdż ruchy w tej ścieżce
-      int fromXX=possiblePaths.get(j).get(k).getFromX();
-      int fromYY=possiblePaths.get(j).get(k).getFromY();
-      int toXX=possiblePaths.get(j).get(k).getToX();
-      int toYY=possiblePaths.get(j).get(k).getToY();
-
-      if (fromXX==move.getToX()&&fromYY==move.getToY()) {
+      fromX = possiblePaths.get(indexOfPath).get(k).getFromX();
+      fromY = possiblePaths.get(indexOfPath).get(k).getFromY();
+      if (fromX == move.getToX() && fromY == move.getToY()) {
         return true;
       }
     }
@@ -265,7 +191,6 @@ public class BestMove {
         result = (gameBoard[toX + 1][toY] != 0 && gameBoard[toX + 1][toY] != -1);
       }
     }
-    firstStep = false;
     return result;
   }
 
@@ -291,7 +216,7 @@ public class BestMove {
       return false; //out of the board
     }
     if (gameBoard[fromX][fromY] == 0) {
-      if(move.isFirst()) {
+      if (move.isFirst()) {
         return false; //empty 'fromField'
       }
     }
@@ -299,7 +224,7 @@ public class BestMove {
       return false; //not empty 'toField'
     }
 
-    if(goals[move.getFromX()][move.getFromY()] == true) return false;
+    if (goals[move.getFromX()][move.getFromY()] == true) return false;
 
 
     if (isFirst) {
@@ -323,13 +248,13 @@ public class BestMove {
     return result;
   }
 
-  private Move[] arrayOfPossibleMoves( int x, int y, boolean isFirst, boolean previousWasJump) {
-    if(goals[x][y] == true) return null;
+  private Move[] arrayOfPossibleMoves(int x, int y, boolean isFirst, boolean previousWasJump) {
+    if (achieved[x][y] == 1) return null;
 
     Move[] fields = new Move[12];
 
-    if(isFirst) {
-      fields[0] = new Move( x, y, x, y + 1,  isFirst,false, previousWasJump);
+    if (isFirst) {
+      fields[0] = new Move(x, y, x, y + 1,  isFirst,false, previousWasJump);
       fields[1] = new Move(x, y, x + 1, y + 1,  isFirst,false, previousWasJump);
       fields[2] = new Move(x, y, x + 1, y,  isFirst,false, previousWasJump);
       fields[3] = new Move(x, y, x, y - 1,  isFirst,false, previousWasJump);
@@ -350,7 +275,7 @@ public class BestMove {
 
     int i;
     if (isFirst) i = 0;
-    else i=6;
+    else i = 6;
     for (; i < 12; i++) {
       if (!isMovePossible(fields[i])) {
         fields[i] = null;
@@ -365,17 +290,17 @@ public class BestMove {
     int lastX = possiblePaths.get(indexOfPath).getToX();
     int lastY = possiblePaths.get(indexOfPath).getToY();
 
-    int length = Math.abs(lastX -firstX) + Math.abs(lastY-firstY);
+    int length = Math.abs(lastX - firstX) + Math.abs(lastY - firstY);
     possiblePaths.get(indexOfPath).setLength(length);
   }
 
   private int calculatePathToGoal(int fromX, int fromY) {
     int bestDistance = 25;
     int distance;
-    for(int i = 0; i < size ; i++) {
-      for (int j = 0 ; j < size; j++) {
-        if(goals[i][j] == false) continue;
-        distance = Math.abs(fromX -i) + Math.abs(fromY-j);
+    for (int i = 0; i < size; i++) {
+      for (int j = 0; j < size; j++) {
+        if (goals[i][j] == false) continue;
+        distance = Math.abs(fromX - i) + Math.abs(fromY - j);
         if (distance < bestDistance) bestDistance = distance;
       }
     }
@@ -388,20 +313,15 @@ public class BestMove {
     int lastX = possiblePaths.get(indexOfPath).getToX();
     int lastY = possiblePaths.get(indexOfPath).getToY();
 
-    for(int i = 0; i < size ; i++) {
-      for (int j = 0 ; j < size; j++) {
-        if(goals[i][j] == false) continue;
-        distance = Math.abs(lastX -i) + Math.abs(lastY-j);
+    for (int i = 0; i < size ; i++) {
+      for (int j = 0; j < size; j++) {
+        if (goals[i][j] == false) continue;
+        distance = Math.abs(lastX - i) + Math.abs(lastY - j);
         if (distance > bestDistance) bestDistance = distance;
       }
     }
 
     possiblePaths.get(indexOfPath).setDistanceToGoal(bestDistance);
-  }
-
-  // TODO test
-  public ArrayList<Path> getPossibleMoves() {
-    return possiblePaths;
   }
 
   public Path chooseBestPath() {
@@ -413,50 +333,34 @@ public class BestMove {
     ArrayList<Path> closestToDestination = new ArrayList<>();
     ArrayList<Path> closerToDestination = new ArrayList<>();
 
-    int goalDist=24;
-    int pathLength=0;
-    int index=0;
+    int goalDist = 24;
+    int index;
 
     //jeśli ten ruchu nie zmienia odległości od celu to go pommiń
-    for(int i = 0; i < possiblePaths.size(); i++) {
-      if(possiblePaths.get(i).getDistanceToGoal() < calculatePathToGoal(possiblePaths.get(i).getFromX(), possiblePaths.get(i).getFromY())) {
+    for (int i = 0; i < possiblePaths.size(); i++) {
+      if (possiblePaths.get(i).getDistanceToGoal() < calculatePathToGoal(possiblePaths.get(i).getFromX(), possiblePaths.get(i).getFromY())) {
         closerToDestination.add(possiblePaths.get(i));
       }
     }
 
-    for(int i = 0; i < closerToDestination.size(); i++) {
-      if(closerToDestination.get(i).getDistanceToGoal() < goalDist) {
+    for (int i = 0; i < closerToDestination.size(); i++) {
+      if (closerToDestination.get(i).getDistanceToGoal() < goalDist) {
         goalDist = closerToDestination.get(i).getDistanceToGoal();
       }
     }
 
 
-    for(int i = 0; i < closerToDestination.size(); i++) {
-      if(closerToDestination.get(i).getDistanceToGoal() == goalDist) {
+    for (int i = 0; i < closerToDestination.size(); i++) {
+      if (closerToDestination.get(i).getDistanceToGoal() == goalDist) {
         closestToDestination.add(closerToDestination.get(i));
       }
     }
-    if(closestToDestination.size()>0) {
+    if (closestToDestination.size() > 0) {
       index = random.nextInt(closestToDestination.size());
       return closestToDestination.get(index);
-    } else {
+    } else if (possiblePaths.size() > 0) {
       index = random.nextInt(possiblePaths.size());
       return possiblePaths.get(index);
-    }
-
-    /*for(int i = 0; i < closestToDestination.size(); i++) {
-      if(closestToDestination.get(i).getLength() > pathLength) {
-        pathLength = closestToDestination.get(i).getLength();
-        index=i;
-      }
-    }*/
-    //LOSOWO
-
-
-  }
-
-  //TODO testy
-  public boolean[][] getGoals() {
-    return goals;
+    } else return null;
   }
 }

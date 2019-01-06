@@ -44,16 +44,8 @@ public class Move {
     return isFirst;
   }
 
-  public void setFirst(boolean isFirst) {
-    this.isFirst = isFirst;
-  }
-
   public boolean isPreviousWasJump() {
     return previousWasJump;
-  }
-
-  public void setPreviousWasJump(boolean previousWasJump) {
-    this.previousWasJump=previousWasJump;
   }
 
 }

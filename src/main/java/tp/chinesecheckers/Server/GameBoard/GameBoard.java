@@ -44,11 +44,25 @@ public class GameBoard {
    * @throws CantRemovePawnException wyrzucany gdy chcemy przemiescic cos z lub do puntu wylaczonego z gry
    */
   public void movePawn(int pawnX, int pawnY, int newX, int newY) throws CantRemovePawnException {
+
     if (board[newX][newY] == -1 || board[pawnX][pawnY] == -1) {
       throw new CantRemovePawnException();
     }
     board[newX][newY] = board[pawnX][pawnY];
     board[pawnX][pawnY] = 0;
+
+    //TODO rysowanie planszy serwer
+    System.out.println("Widok serwera");
+    for (int j = 16; j > -1; j--){
+      for ( int i = 0; i < 17; i++) {
+        if(board[i][j] == -1){
+          System.out.print("  ");
+        } else {
+          System.out.print(board[i][j] + " ");
+        }
+      }
+      System.out.println();
+    }
   }
 
   /**
