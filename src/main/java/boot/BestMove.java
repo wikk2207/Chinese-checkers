@@ -411,22 +411,38 @@ public class BestMove {
     }
 
     ArrayList<Path> closestToDestination = new ArrayList<>();
+    ArrayList<Path> closerToDestination = new ArrayList<>();
+
     int goalDist=24;
     int pathLength=0;
     int index=0;
+
+    //jeśli ten ruchu nie zmienia odległości od celu to go pommiń
     for(int i = 0; i < possiblePaths.size(); i++) {
-      if(possiblePaths.get(i).getDistanceToGoal() < goalDist) {
-        goalDist = possiblePaths.get(i).getDistanceToGoal();
+      if(possiblePaths.get(i).getDistanceToGoal() < calculatePathToGoal(possiblePaths.get(i).getFromX(), possiblePaths.get(i).getFromY())) {
+        closerToDestination.add(possiblePaths.get(i));
+      }
+    }
+
+    for(int i = 0; i < closerToDestination.size(); i++) {
+      if(closerToDestination.get(i).getDistanceToGoal() < goalDist) {
+        goalDist = closerToDestination.get(i).getDistanceToGoal();
       }
     }
 
 
-    for(int i = 0; i < possiblePaths.size(); i++) {
-      if(possiblePaths.get(i).getDistanceToGoal() == goalDist) {
-        closestToDestination.add(possiblePaths.get(i));
+    for(int i = 0; i < closerToDestination.size(); i++) {
+      if(closerToDestination.get(i).getDistanceToGoal() == goalDist) {
+        closestToDestination.add(closerToDestination.get(i));
       }
     }
-    index = random.nextInt(closestToDestination.size());
+    if(closestToDestination.size()>0) {
+      index = random.nextInt(closestToDestination.size());
+      return closestToDestination.get(index);
+    } else {
+      index = random.nextInt(possiblePaths.size());
+      return possiblePaths.get(index);
+    }
 
     /*for(int i = 0; i < closestToDestination.size(); i++) {
       if(closestToDestination.get(i).getLength() > pathLength) {
@@ -437,7 +453,6 @@ public class BestMove {
     //LOSOWO
 
 
-    return closestToDestination.get(index);
   }
 
   //TODO testy

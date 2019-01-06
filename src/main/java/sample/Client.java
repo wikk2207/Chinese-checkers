@@ -113,10 +113,9 @@ public class Client extends Thread{
         } else if (response.equals(CORRECT_MOVE)) {
           System.out.println(response);
           counter.correctMove();
-        } else if (response.equals(CORRECT_MOVE)) {
+        } else if (response.equals(WON)) {
           System.out.println(response);
-          //TODO reakcja na zwycięstwo
-          //counter.youWon(); czy coś XD
+          counter.youWon();
         }
       }
     } catch (IOException e) {

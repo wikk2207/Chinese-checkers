@@ -130,7 +130,7 @@ public class Game {
 //Ustawienie rozmiaru planszy
   private void addBoot() {
     players[iterator] = new Boot(17, this, IDs[iterator]);
-    //TODO dodane przez Wike
+    // dodane przez Wike
     players[iterator].setOpponetsNum(realPlayerNum + bootNum);
     iterator++;
   }
@@ -156,6 +156,10 @@ public class Game {
         int[] cordinates = CordinateTranslator.serverToPlayer(IDs[i], begX, begY, endX, endY);
         players[i].otherPlayerMoved(IDs[currentPlayer], cordinates[0],
             cordinates[1], cordinates[2], cordinates[3]);
+
+        //TODO - WIKA
+        //System.out.println("DONE MOVE (translated) " + i + " " + cordinates[0] + " " + cordinates[1] + " " + cordinates[2] + " " + cordinates[3]);
+
       }
     }
   }

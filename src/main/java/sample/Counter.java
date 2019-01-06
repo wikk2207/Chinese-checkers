@@ -2,6 +2,7 @@ package sample;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.VBox;
 import player.RealPlayer;
 
@@ -16,6 +17,7 @@ public class Counter {
   private boolean boardCreated;
   private int playerId;
   private boolean czyPadlaOdpowiedz;
+  private boolean victory;
 
 
   Counter() {
@@ -24,6 +26,7 @@ public class Counter {
     myTurn = false;
     boardCreated = false;
     czyPadlaOdpowiedz = false;
+    victory = false;
   }
 
   public void addPlayers() {
@@ -223,9 +226,13 @@ public class Counter {
    * Set my turn as true.
    */
   public void yourTurn() {
-    myTurn=true;
-    if (boardCreated) {
-      player.setMyTurn(true);
+    if(victory) {
+      endMove();
+    } else {
+      myTurn=true;
+      if (boardCreated) {
+        player.setMyTurn(true);
+      }
     }
   }
 
@@ -259,6 +266,11 @@ public class Counter {
   public void correctMove() {
     correctMove = true;
     czyPadlaOdpowiedz = true;
+  }
+
+  public void youWon() {
+    victory = true;
+    player.won();
   }
 
 }

@@ -340,4 +340,11 @@ public class Board {
   public void endMove() {
     player.endMove();
   }
+
+  public void won() {
+    Platform.runLater(() -> {
+      hBox.getChildren().remove(endMoveButton);
+      isMyTurn.setText("Victory!!!");
+    });
+  }
 }

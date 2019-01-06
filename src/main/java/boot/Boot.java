@@ -127,11 +127,14 @@ public class Boot implements Player {
   public void otherPlayerMoved(int opponent, int begX, int begY, int endX, int endY) {
     //TODO
     //System.out.println(begX+ " " + begY+ " " + endX+ " " + endY);
-    try {
+    gameBoard[endX][endY] = opponent + 1;
+    gameBoard[begX][begY] = 0;
+
+   /* try {
       movePawn(begX,begY,endX,endY);
     } catch (MovingPawnBootException e) {
       System.out.println(e.getMessage());
-    }
+    }*/
   }
 
   @Override
@@ -298,9 +301,9 @@ public class Boot implements Player {
     if (gameBoard[fromX][fromY] == -1 || gameBoard[toX][toY] == -1) {
       throw new MovingPawnBootException("Out of the board");
     }
-    if (gameBoard[fromX][fromY] == 0) {
+    /*if (gameBoard[fromX][fromY] == 0) {
       throw  new MovingPawnBootException("Field where you begin movement is empty.");
-    }
+    }*/
     if (gameBoard[toX][toY] != 0) {
       throw new MovingPawnBootException("Field where you end movement isn't empty.");
     }
@@ -317,6 +320,11 @@ public class Boot implements Player {
     }
     //TODO
     //System.out.println("Send Move: "+ myRealId +" " + move.getFromX() + " " + move.getFromY() + " " + move.getToX() + " " + move.getToY());
+
+  }
+
+  @Override
+  public void won() {
 
   }
 

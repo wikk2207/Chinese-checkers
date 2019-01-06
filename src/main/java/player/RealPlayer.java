@@ -191,4 +191,8 @@ public class RealPlayer {
   public void endMove() {
     counter.endMove();
   }
+
+  public void won() {
+    board.won();
+  }
 }
